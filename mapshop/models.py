@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 
@@ -55,7 +56,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     '''Элементы заказа'''
-    basket = models.ForeignKey('Basket')
+    order = models.ForeignKey('Order')
     product = models.ForeignKey('Product') 
     created_at = models.DateTimeField(auto_now_add=True)
     
