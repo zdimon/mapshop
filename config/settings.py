@@ -47,9 +47,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'mapshop.urls'
+ROOT_URLCONF = 'config.urls'
 
-WSGI_APPLICATION = 'mapshop.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
