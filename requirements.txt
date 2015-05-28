@@ -1,0 +1,11 @@
+Django==1.6
+south==1.0
+celery==3.1.11
+django-celery==3.1.10
+django-grappelli==2.5.3 
+Pillow==2.5.1
+sorl-thumbnail==11.12
+django-image-cropping==1.0.0
+easy-thumbnails==2.1
+django-resized
+django-ckeditor-updated==4.4.4
