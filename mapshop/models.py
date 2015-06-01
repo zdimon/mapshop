@@ -71,7 +71,7 @@ class Order(models.Model):
                                     default=u'Новый',
                                     max_length=10)
     client = models.ForeignKey('Client') 
-    kiosk = models.ForeignKey('Kiosk') 
+    kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     
 
@@ -84,5 +84,5 @@ class OrderItem(models.Model):
 
 class Preorder(models.Model):
     '''Предзаказ содержит данные о предзаказах по клиентам'''
-    id_product = models.ForeignKey('Product')
-    id_client =  models.ForeignKey('Client')
+    product = models.ForeignKey('Product')
+    client =  models.ForeignKey('Client')

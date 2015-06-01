@@ -1,6 +1,6 @@
 Задачи.
 
-0. Загрузка тестовых данных.
+0. Загрузка тестовых данных и киосков.
 
 import tempfile
 from django.core import files
