@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'mapshop',
+    'django_ajax',
 )
 
 MIDDLEWARE_CLASSES = (
