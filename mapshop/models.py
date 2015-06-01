@@ -84,5 +84,5 @@ class OrderItem(models.Model):
 
 class Preorder(models.Model):
     '''Предзаказ содержит данные о предзаказах по клиентам'''
-    id_product = models.ForeignKey('Product')
-    id_client =  models.ForeignKey('Client')
+    product = models.ForeignKey('Product')
+    client =  models.ForeignKey('Client')
