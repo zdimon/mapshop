@@ -71,7 +71,7 @@ class Order(models.Model):
                                     default=u'Новый',
                                     max_length=10)
     client = models.ForeignKey('Client') 
-    kiosk = models.ForeignKey('Kiosk') 
+    kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     
 
