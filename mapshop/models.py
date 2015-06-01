@@ -29,11 +29,32 @@ class ProductImages(models.Model):
    
 class Client(models.Model):
     ''' Класс Клиент содержит данные о клиенте (емайл, телефон, параметр уведомления по емайлу, параметр уведомления по телефону)  '''
-    email = models.EmailField()
+    TREATMENTS = (
+        (u'Уважаемый', u'Уважаемый'),
+        (u'Уважаемая', u'Уважаемая'),
+    treatment = models.CharField(verbose_name=u'Формат обращения',
+                                    choices=TREATMENTS,
+                                    default=u'Уважаемый',
+                                    max_length=10)
+    surname = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     phone = models.CharField(max_length=11)
+    add_phone = models.CharField(max_length=11)
+    email = models.EmailField()
+    birthday = models.DateField()
     notice_email = models.BooleanField()
     notice_phone = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
+    is_organization = models.BooleanField(default='True')
+    name_org = models.CharField(max_length=100)
+    address_org = models.CharField(max_length=200)
+    postal_index_org = models.DecimalField(max_digits=5)
+    inn_org = models.DecimalField(max_digits=10)
+    kpp_org = models.DecimalField(max_digits=10)
+    account_org = models.DecimalField(max_digits=16)
+    bank_org = models.CharField(max_length=100)
+    cor_account_org = models.DecimalField(max_digits=16)
+    bik_org = models.DecimalField(max_digits=9)
 
 
 class Order(models.Model):
@@ -61,4 +82,7 @@ class OrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
 
-
+class Preorder(models.Model):
+    '''Предзаказ содержит данные о предзаказах по клиентам'''
+    id_product = models.ForeignKey('Product')
+    id_client =  models.ForeignKey('Client')
