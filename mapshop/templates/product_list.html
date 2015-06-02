@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form action="{% url 'page.product_list' %}">
+    <input type="checkbox" name=""/>
+    <input type="submit" value="Show"/>
+</form>
+<main>
+   {% for product in products %}
+    {% empty %}
+       <p>Выберите .... для сортировки</p>
+{% endfor %}
+</main>
+
+</body>
+</html>
