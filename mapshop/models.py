@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Kiosk(models.Model):
-    ''' Класс Киоск содержит все данные о киоске (адрес, фото, мнемонику, широту, долготу) '''
+    u''' Класс Киоск содержит все данные о киоске (адрес, фото, мнемонику, широту, долготу) '''
     address = models.CharField(max_length=200)
     foto = models.ImageField(upload_to='media')
     mnemonic = models.CharField(max_length=5)
@@ -12,7 +12,7 @@ class Kiosk(models.Model):
 
 
 class Product(models.Model):
-    ''' Класс Продукт содержит данные о товарах (имя, фото, цену, описание, наличие товара)'''
+    u''' Класс Продукт содержит данные о товарах (имя, фото, цену, описание, наличие товара)'''
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=u"Стоимость (руб)")
     description = models.CharField(max_length=200)
@@ -21,17 +21,18 @@ class Product(models.Model):
 
 
 class ProductImages(models.Model):
-    ''' картинки товаров '''
+    u''' картинки товаров '''
     product = models.ForeignKey('Product')
     image  = models.ImageField(upload_to='product', verbose_name=u'Изображение')
 
 
    
 class Client(models.Model):
-    ''' Класс Клиент содержит данные о клиенте (емайл, телефон, параметр уведомления по емайлу, параметр уведомления по телефону)  '''
+    u''' Класс Клиент содержит данные о клиенте (емайл, телефон, параметр уведомления по емайлу, параметр уведомления по телефону)  '''
     TREATMENTS = (
         (u'Уважаемый', u'Уважаемый'),
         (u'Уважаемая', u'Уважаемая'),
+        )
     treatment = models.CharField(verbose_name=u'Формат обращения',
                                     choices=TREATMENTS,
                                     default=u'Уважаемый',
@@ -58,7 +59,7 @@ class Client(models.Model):
 
 
 class Order(models.Model):
-    ''' заказы по клиенту '''
+    u''' заказы по клиенту '''
     STATUSES = (
         (u'Новый', u'Новый'),
         (u'Оплачен', u'Оплачен'),
@@ -76,13 +77,13 @@ class Order(models.Model):
     
 
 class OrderItem(models.Model):
-    '''Элементы заказа'''
+    u'''Элементы заказа'''
     order = models.ForeignKey('Order')
     product = models.ForeignKey('Product') 
     created_at = models.DateTimeField(auto_now_add=True)
     
 
 class Preorder(models.Model):
-    '''Предзаказ содержит данные о предзаказах по клиентам'''
+    u'''Предзаказ содержит данные о предзаказах по клиентам'''
     product = models.ForeignKey('Product')
     client =  models.ForeignKey('Client')
