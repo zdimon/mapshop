@@ -9,3 +9,4 @@ django-image-cropping==1.0.0
 easy-thumbnails==2.1
 django-resized
 django-ckeditor-updated==4.4.4
+Sphinx

@@ -1,5 +1,16 @@
 Задачи.
 
+0. Загрузка тестовых данных и киосков.
+
+import tempfile
+from django.core import files
+for block in request.iter_content(1024 * 8):
+    if not block:
+        break
+    lf.write(block)
+j.cover.save(file_name, files.File(lf))
+
+
 1. Создать раздел списка товаров. Организовать сортировку по популярности и цене. Обеспечить фильтр по категориям.
 
 
@@ -10,6 +21,10 @@
  Пример тут http://telek.kardos.media/distribution/
  При клике на киоск делать http запрос, куда передать параметры: id киоска и id корзины (скрытое поле).
  Подсветить выбранный киоск. Загрузить командой киоски из csv файла.
+http://stackoverflow.com/questions/18191695/google-maps-api-v3-marker-on-click-with-infowindow
+
+
+
 
 4. Раздел уведомления. Создать страницу с формой с емейлом и телефоном. При сабмите сохранять инфу в базе. Вызвать задачу рассылки при изменении статуса товара с нет в наличии в есть в наличии.
 
