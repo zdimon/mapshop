@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
 from django_ajax.decorators import ajax
 
 @ajax
-def my_view(request)
-    return {'myvar'}
+def add_product_to_basket(request):
+    '''  Добавление товара в корзину и вывод содержимого корзины в html блок <table id="my_busket"></table> '''
+    data = {
+            'inner-fragments': { '#my_busket': '<h1> Моя корзина </h1>' },       
+           }     
+    return data
 
 '''
 

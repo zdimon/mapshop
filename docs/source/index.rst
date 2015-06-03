@@ -12,6 +12,8 @@ Contents:
    :maxdepth: 2
 
    models
+   views
+   ajax
 
 Indices and tables
 ==================

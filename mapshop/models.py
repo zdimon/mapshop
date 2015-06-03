@@ -49,13 +49,13 @@ class Client(models.Model):
     is_organization = models.BooleanField(default='True')
     name_org = models.CharField(max_length=100)
     address_org = models.CharField(max_length=200)
-    postal_index_org = models.DecimalField(max_digits=5)
-    inn_org = models.DecimalField(max_digits=10)
-    kpp_org = models.DecimalField(max_digits=10)
-    account_org = models.DecimalField(max_digits=16)
+    postal_index_org = models.CharField(max_length=10)
+    inn_org = models.CharField(max_length=10)
+    kpp_org = models.CharField(max_length=10)
+    account_org = models.CharField(max_length=16)
     bank_org = models.CharField(max_length=100)
-    cor_account_org = models.DecimalField(max_digits=16)
-    bik_org = models.DecimalField(max_digits=9)
+    cor_account_org = models.CharField(max_length=16)
+    bik_org = models.CharField(max_length=9)
 
 
 class Order(models.Model):

@@ -1,0 +1,18 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    
+  
+</head>
+<body >
+       <a href="/"> На главную </a>
+        <a href="{% url 'catalog_all' %}"> Каталог </a>
+       
+        {% block content %}{% endblock %}
+        
+     
+</body>
+
+       
+</html>
