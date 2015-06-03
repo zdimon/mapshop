@@ -6,15 +6,31 @@
     <title></title>
 </head>
 <body>
-<form action="{% url 'page.product_list' %}">
-    <input type="checkbox" name=""/>
-    <input type="submit" value="Show"/>
-</form>
+
 <main>
-   {% for product in products %}
-    {% empty %}
-       <p>Выберите .... для сортировки</p>
-{% endfor %}
+    <header><h1>Список товаров</h1></header>
+    <h2>Форма сортировки</h2>
+    <form action="{% url 'page.product_list' %}">
+        {{ filter_form.as_p }}
+        <input type="submit" value="Сортировать"/>
+    </form>
+    <h2>Товары</h2>
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Рейтинг</th>
+        </tr>
+        {% for product in filter_form.get_products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.rate }}</td>
+            </tr>
+        {% empty %}
+            <p>Выберите .... для сортировки</p>
+        {% endfor %}
+    </table>
 </main>
 
 </body>

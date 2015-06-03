@@ -10,6 +10,13 @@ class Kiosk(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
 
+class Category(models.Model):
+    ''' Класс категори товаров'''
+    name = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.name
+
 
 class Product(models.Model):
     ''' Класс Продукт содержит данные о товарах (имя, фото, цену, описание, наличие товара)'''
@@ -18,6 +25,7 @@ class Product(models.Model):
     description = models.CharField(max_length=200)
     available = models.BooleanField()
     rate = models.PositiveSmallIntegerField(default=0)
+    category = models.ForeignKey(Category, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
