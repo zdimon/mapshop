@@ -3,8 +3,9 @@ import logging
 from optparse import make_option
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
-from blog.models import BlogCategory
-
+from mapshop.models import Category, Product, ProductImages
+from django.core.files import File
+from random import randint
 
 #logger = logging.getLogger(__name__)
 
@@ -14,15 +15,37 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         
         print 'start'
-        #BlogCategory.objects.all().delete()
-        l [= 'food','slippers']
+        ProductImages.objects.all().delete()
+        Product.objects.all().delete()
+        Category.objects.all().delete()
+        l = [ 'food','slippers']
+        
         for i in l:
             o = Category()
-            o.name = 
+            o.name = i
             o.save()
-            p = Product()
-            p.category = o
-            p.save() etc
+            cnt = 0
+            for n in range(10):
+                cnt = cnt  + 1 
+                p = Product()
+                p.category = o
+                p.price = n
+                p.rate = randint(0,90)
+                p.name = 'Product %s' % n
+                p.save()
+                for im in range(3):
+                    path = 'media/test.jpg'
+                    #import pdb; pdb.set_trace()
+                    name = 'test.jpg' 
+                    f = open(path, 'r')
+                    file = File(f)
+                    im = ProductImages()
+                    im.product = p
+                    im.image.save(name,file)
+                    im.save()
+                    print 'process with image %s' % im
+                print 'process with %s' % n
+        print 'done'
 
 '''
 import tempfile
@@ -36,10 +59,4 @@ j.cover.save(file_name, files.File(lf))
 
 '''
 
-        for i,d in insertedPks:
-            print i,d
-        
-        
-        
-
-        print 'Done' 
+       
