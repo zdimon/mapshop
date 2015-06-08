@@ -13,6 +13,7 @@ class Kiosk(models.Model):
     mnemonic = models.CharField(max_length=5)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    name = models.CharField(max_length=200)
 
 class Category(models.Model):
     ''' Класс категори товаров'''
