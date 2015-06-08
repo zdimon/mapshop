@@ -3,6 +3,8 @@ from django.db import models
 from image_cropping import ImageRatioField
 from django.utils.safestring import mark_safe
 from easy_thumbnails.files import get_thumbnailer
+import pytils
+from django.core.urlresolvers import reverse
 
 class Kiosk(models.Model):
     u''' Класс Киоск содержит все данные о киоске (адрес, фото, мнемонику, широту, долготу) '''
@@ -15,9 +17,15 @@ class Kiosk(models.Model):
 class Category(models.Model):
     ''' Класс категори товаров'''
     name = models.CharField(max_length=200)
-
+    name_slug = models.CharField(verbose_name='Name slug',max_length=250, blank=True)
+    def get_absolute_url(self):
+       return reverse("catalog_filter", kwargs={"slug": self.name_slug})
     def __unicode__(self):
         return self.name
+    def save(self, **kwargs):
+        if not self.id:
+            self.name_slug = pytils.translit.slugify(self.name)
+        return super(Category, self).save(**kwargs)
 
 
 class Product(models.Model):
@@ -79,13 +87,14 @@ class Client(models.Model):
     is_organization = models.BooleanField(default='True')
     name_org = models.CharField(max_length=100)
     address_org = models.CharField(max_length=200)
-    postal_index_org = models.DecimalField(max_digits=5, decimal_places=2)
-    inn_org = models.DecimalField(max_digits=10, decimal_places=2)
-    kpp_org = models.DecimalField(max_digits=10, decimal_places=2)
-    account_org = models.DecimalField(max_digits=16, decimal_places=2)
+    postal_index_org = models.CharField(max_length=10)
+    inn_org = models.CharField(max_length=10)
+    kpp_org = models.CharField(max_length=10)
+    account_org = models.CharField(max_length=16)
     bank_org = models.CharField(max_length=100)
-    cor_account_org = models.DecimalField(max_digits=16, decimal_places=2)
-    bik_org = models.DecimalField(max_digits=9, decimal_places=2)
+    cor_account_org = models.CharField(max_length=16)
+    bik_org = models.CharField(max_length=9)
+
 
 
 class Order(models.Model):

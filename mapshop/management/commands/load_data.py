@@ -34,7 +34,7 @@ class Command(BaseCommand):
                 p.name = 'Product %s' % n
                 p.save()
                 for im in range(3):
-                    path = 'media/test.jpg'
+                    path = 'fixture/test.jpg'
                     #import pdb; pdb.set_trace()
                     name = 'test.jpg' 
                     f = open(path, 'r')

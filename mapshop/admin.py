@@ -5,11 +5,11 @@ from mapshop.models import Product, Category, ProductImages
 from image_cropping import ImageCroppingMixin
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'rate')
+    list_display = ('name', 'price', 'rate', 'category')
     list_filter = ('name', 'price', 'rate')
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'name_slug')
 
 
 admin.site.register(Product, ProductAdmin)

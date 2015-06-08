@@ -11,3 +11,4 @@ django-resized
 django-ckeditor-updated==4.4.4
 Sphinx
 djangoajax==2.2.12
+pytils
