@@ -2,8 +2,10 @@
 from django_ajax.decorators import ajax
 
 @ajax
-def add_product_to_basket(request):
+def add_product_to_cart(request):
     '''  Добавление товара в корзину и вывод содержимого корзины в html блок <table id="my_busket"></table> '''
+    print '----------------------------------%s' % request.GET['product_id']
+    print '----------------------------------%s' % request.user.username
     data = {
             'inner-fragments': { '#my_busket': '<h1> Моя корзина </h1>' },       
            }     

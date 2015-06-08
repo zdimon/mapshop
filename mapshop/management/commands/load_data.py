@@ -47,27 +47,27 @@ class Command(BaseCommand):
                     im.save()
                     print 'process with image %s' % im
                 print 'process with %s' % n
-	input_file = open("kiosk.csv", "rb")
-	rdr = csv.DictReader(input_file, delimiter=';', fieldnames=['mnemonic', 'name', 'address','latitude','longitude'])
-	for rec in rdr:
-		try:
-			k = Kiosk()
-                        k.mnemonic = rec['mnemonic']
-			k.name = rec['name']
-			k.address = rec['address']
-			k.latitude = rec['latitude']
-			k.longitude = rec['longitude']
-	                path = 'media/kiosk.jpg'
-			#import pdb; pdb.set_trace()
-			name = 'kiosk.jpg'
-			print 'Test Hi'
-			f = open(path, 'r')
-			file = File(f)
-			k.foto.save(name,file)
-			k.save()
-		except:
-			print 'Error'
-	input_file.close()
+        input_file = open("kiosk.csv", "rb")
+        rdr = csv.DictReader(input_file, delimiter=';', fieldnames=['mnemonic', 'name', 'address','latitude','longitude'])
+        for rec in rdr:
+            #try:
+            k = Kiosk()
+            k.mnemonic = rec['mnemonic']
+            k.name = rec['name']
+            k.address = rec['address']
+            k.latitude = rec['latitude']
+            k.longitude = rec['longitude']
+            path = 'fixture/kiosk.jpg'
+            #import pdb; pdb.set_trace()
+            name = 'kiosk.jpg'
+            print 'Test Hi'
+            f = open(path, 'r')
+            file = File(f)
+            k.foto.save(name,file)
+            k.save()
+            #except:
+            #	print 'Error'
+        input_file.close()
         print 'done'
 
 '''

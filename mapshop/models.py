@@ -14,6 +14,7 @@ class Kiosk(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     name = models.CharField(max_length=200)
+    scheduler = models.CharField(max_length=200, default='с 9 до 6 в будни')
 
 class Category(models.Model):
     ''' Класс категори товаров'''
@@ -37,7 +38,16 @@ class Product(models.Model):
     available = models.BooleanField(default=False) 
     rate = models.PositiveSmallIntegerField(default=0)
     category = models.ForeignKey(Category, null=True, blank=True)
-
+    @property
+    def thumb(self):
+        image = ProductImages.objects.get(is_main=True,product=self)
+        thumbnail_url = get_thumbnailer(image.image).get_thumbnail({
+            'size': (100, 100),
+            'box': image.cropping,
+            'crop': True,
+            'detail': True,
+        }).url
+        return mark_safe(u'<img src="%s" />' % thumbnail_url)
     def __unicode__(self):
         return self.name
 
@@ -49,6 +59,7 @@ class ProductImages(models.Model):
     product = models.ForeignKey('Product')
     image  = models.ImageField(upload_to='product', verbose_name=u'Изображение')
     cropping = ImageRatioField('image', '430x360')
+    is_main = models.BooleanField(default=False) 
     @property
     def thumb(self):
         #try:
@@ -61,6 +72,11 @@ class ProductImages(models.Model):
         return mark_safe(u'<img src="%s" />' % thumbnail_url)
         #except:
         #    return 'no image'
+    def save(self, **kwargs):
+        if not self.id:
+            if not ProductImages.objects.filter(product=self.product).exists():
+                self.is_main = True
+        return super(ProductImages, self).save(**kwargs)
 
 
    

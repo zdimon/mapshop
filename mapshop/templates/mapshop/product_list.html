@@ -21,8 +21,11 @@
 
  <div class="product_list">
     {% for p in product_list %}
-        {{ p }} - {{ p.category }} - {{ p.rate }}<br>
+        {{ p.thumb }} --- {{ p }} - {{ p.category }} - {{ p.rate }}  <span data-id-product="{{ p.id }}" data-user="{{ user.id }}" class="add_to_cart"> Add this to cart </span><br>
     {% endfor %}
  </div>
+
+
+
 
 {% endblock %}

@@ -15,10 +15,10 @@ def product_list(request,slug='all'):
         Список товаров в категории (по умолчанию во всех категориях)
         при передаче параметров sort_price, sort_rate (up/down) сортируем.
     '''
+    # initialization
+    cur_rate_order = 'asc'
     # get all products
-    #import pdb; pdb.set_trace()
-    products = Product.objects.filter()
-    print products
+    products = Product.objects.all()
     if slug=='all':
         title = 'Все товары'
         # select all categories 
