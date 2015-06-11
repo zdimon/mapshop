@@ -5,8 +5,10 @@ from django.template import RequestContext
 from mapshop.forms import ProductFilterForm
 from mapshop.models import Category, Product
 
+
 def home(request):
     context = {}
+    print '-------%s' % request.session.session_key
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
 

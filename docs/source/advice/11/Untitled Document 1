@@ -1,0 +1,7 @@
+request.session.get('basket_good')
+
+request.session['basket_count'] = []
+
+
+request.COOKIES.get(settings.SESSION_COOKIE_NAME, None)
+
