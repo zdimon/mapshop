@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <h1> {{ title }} </h1>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 75%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+var map;
+function initialize() {
+    var myLatLng = Array();
+    var marker = Array();
+    {% for k in kiosk_list %}
+     myLatLng[{{k.id}}] = new google.maps.LatLng({{ k.latitude }},{{ k.longitude }});
+    {% endfor %}
+
+    var mapOptions = {
+    zoom: 8,
+    center: myLatLng[1]
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+{% for k in kiosk_list %}
+    marker[{{k.id}}] = new google.maps.Marker({
+    position: myLatLng[{{k.id}}],
+    map: map,
+    title: '{{k.name}}'
+  });
+google.maps.event.addListener(marker[{{k.id}}], 'click', function() {
+     
+
+    ajaxGet('/getinfo/kiosk', { 'kiosk_id': {{k.id}}, 'order_id': {{order.id}}}, function(content){
+                   
+            });
+
+  
+  });
+{% endfor %}
+
+}
+
+
+
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+    <div id="map-canvas"></div>
+
+    <div id="kiosk_info" style="border: 1px solid red"></div>
+
+{% endblock %}
