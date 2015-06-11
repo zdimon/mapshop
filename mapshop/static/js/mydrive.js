@@ -23,5 +23,9 @@ $(document).ready(function(){
         });   
         //**************************************************
 
+        ajaxGet('/add/to/cart', { }, function(content){
+                    
+            });
+
 
 })

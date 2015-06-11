@@ -3,10 +3,11 @@ import logging
 from optparse import make_option
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
-from mapshop.models import Category, Product, ProductImages, Kiosk 
+from mapshop.models import Category, Product, ProductImages, Kiosk , Order, Client
 from django.core.files import File
 from random import randint
 import csv
+from django.contrib.auth.models import User
 
 #logger = logging.getLogger(__name__)
 
@@ -20,6 +21,8 @@ class Command(BaseCommand):
         ProductImages.objects.all().delete()
         Product.objects.all().delete()
         Category.objects.all().delete()
+        Order.objects.all().delete()
+        Client.objects.all().delete()
         l = [ 'food','slippers']
         
         for i in l:
@@ -68,6 +71,19 @@ class Command(BaseCommand):
             #except:
             #	print 'Error'
         input_file.close()
+
+        o = Order()
+        o.save()
+        print 'order was created'
+
+        try:
+            user = User.objects.get(username='admin')
+            p = Client()
+            p.user_id = user.id
+            p.save()
+        except:
+            print 'you have to create admin'
+
         print 'done'
 
 '''

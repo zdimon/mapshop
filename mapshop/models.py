@@ -111,6 +111,7 @@ class Client(models.Model):
     bank_org = models.CharField(max_length=100)
     cor_account_org = models.CharField(max_length=16)
     bik_org = models.CharField(max_length=9)
+    user_id = models.IntegerField(default=0)
 
 
 
@@ -118,6 +119,8 @@ class Order(models.Model):
     u''' заказы по клиенту '''
     STATUSES = (
         (u'Новый', u'Новый'),
+        (u'Киоск выбран', u'Киоск выбран'),
+        (u'Ожидает оплаты', u'Ожидает оплаты'),
         (u'Оплачен', u'Оплачен'),
         (u'Доставка', u'Доставка'),
         (u'Доставлен', u'Доставлен'),
@@ -127,9 +130,10 @@ class Order(models.Model):
                                     choices=STATUSES,
                                     default=u'Новый',
                                     max_length=10)
-    client = models.ForeignKey('Client') 
+    client = models.ForeignKey('Client', null=True, blank=True) 
     kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
+    session = models.CharField(max_length=250, null=True, blank=True)
     
 
 class OrderItem(models.Model):

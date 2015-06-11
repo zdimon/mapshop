@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from mapshop.models import Product, Category, ProductImages, Kiosk
+from mapshop.models import Product, Category, ProductImages, Kiosk, Order
 from image_cropping import ImageCroppingMixin
 
 class ProductAdmin(admin.ModelAdmin):
@@ -24,3 +24,9 @@ class ProductImagesAdmin(ImageCroppingMixin, admin.ModelAdmin):
 
 
 admin.site.register(ProductImages, ProductImagesAdmin)
+
+class OrderAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Order, OrderAdmin)

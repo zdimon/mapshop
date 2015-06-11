@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from mapshop.forms import ProductFilterForm
-from mapshop.models import Category, Product, Kiosk
+from mapshop.models import Category, Product, Kiosk, Order
 
 def home(request):
     context = {}
+    print 'session %s' % request.session.session_key
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
 
@@ -61,19 +62,16 @@ def product_list(request,slug='all'):
 
 
 
-def kiosk_list(request,slug='all'):
+def kiosk_list(request,order_id=0):
     u''' 
         Отображение всех киосков 
     '''
-    # initialization
-
-    # get all products
-    products = Product.objects.all()
-    if slug=='all':
-        title = 'Выбор киоска'
-        # select all categories 
-        kiosk_list = Kiosk.objects.all()
-
-    context = {'title': title, 'kiosk_list': kiosk_list}
+    kiosk_list = Kiosk.objects.all()
+    #try:
+    order = Order.objects.get(pk=order_id)
+    title = u'Выбор киоска для заказа № %s' % order_id
+    #except:
+    #    pass
+    context = {'kiosk_list': kiosk_list, 'title': title, 'order': order}
     return render_to_response('mapshop/kiosk_list.html', context, RequestContext(request))
 
