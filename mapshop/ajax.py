@@ -1,30 +1,74 @@
 # -*- coding: utf-8 -*-
 from django_ajax.decorators import ajax
-from mapshop.models import Category, Product, Kiosk, Order
+from mapshop.models import Category, Product, Kiosk, Order, OrderItem, get_client_or_create
+
+
+@ajax
+def del_product_from_cart(request):
+    '''  Удаление товара из корзины и вывод содержимого корзины в html блок <table id="my_busket"></table> '''
+    try:
+        o = OrderItem.objects.get(pk=request.GET['item_id'])
+        o.delete()
+    except:
+        pass
+    session = request.session.session_key
+    data = {
+            'inner-fragments': { '#my_basket': get_basket_html_by_session_key(session) },       
+           }     
+    return data
 
 @ajax
 def add_product_to_cart(request):
     '''  Добавление товара в корзину и вывод содержимого корзины в html блок <table id="my_busket"></table> '''
-    print '----------------------------------%s' % request.GET.get('product_id',0)
-    print '----------------------------------%s' % request.user.username
+    session = request.session.session_key
+    #import pdb; pdb.set_trace()
     try:
         product  = Product.objects.get(pk=request.GET.get('product_id',0))
+        try:
+            order = Order.objects.get(session=session)
+        except:
+            order = Order()
+            order.session = session
+            if request.user.is_authenticated:
+                client = get_client_or_create(request.user)
+                order.client = client
+            order.save()
+        try:
+            item = OrderItem.objects.get(order=order, product=product)
+            item.ammount = item.ammount+1
+            item.save()
+        except:
+            item = OrderItem()
+            item.product = product
+            item.order = order
+            item.save()
     except:
         product = None
-
-    session = request.session.session_key
-    try:
-        order = Order.objects.get(session=session)
-    except:
-        order = Order()
-        order.session = session
-        if request.user.is_authenticated:
-            order.user_id = request.user.id
-        order.save()
     data = {
-            'inner-fragments': { '#my_basket': '<h1> Моя корзина </h1>' },       
+            'inner-fragments': { '#my_basket': get_basket_html_by_session_key(session) },       
            }     
     return data
+
+
+def get_basket_html_by_session_key(session):
+    '''  Получение html кода корзины по идентификатору сессии '''
+    out = ''
+    #import pdb; pdb.set_trace()
+    try:
+        order = Order.objects.get(session=session)
+        if order.orderitem_set.all().count() == 0:
+            return u'<b> корзина пуста </b>'
+        out = '<table>'
+        for i in order.orderitem_set.all():
+            out = out + u'<tr><td>%s</td><td>%s</td><td><a href="#" onclick="return false" data-id=%s class="del_product_from_cart" >X</td></tr>' % (i.product, i.ammount, i.id) 
+        out = out + '</table>'
+        out = out + u'<a href="/kiosk/list/%s.html">Оформить заказ</a>' % order.id
+    except:
+        out = u'<b> корзина пуста </b>'
+    return out
+
+
+
 
 
 @ajax
@@ -34,7 +78,11 @@ def getinfo_kiosk(request):
     out = ''
     #try:
     kiosk = Kiosk.objects.get(pk=request.GET['kiosk_id'])
-    out = u'киоск %s <br /> <a href="/finish/order/%s/kiosk/%d">пРОДОЛЖИТЬ ОФОРМЛЕНИЕ</a>' % (kiosk.name, request.GET['order_id'], kiosk.id)
+    order = Order.objects.get(pk=request.GET['order_id'])
+    order.kiosk = kiosk
+    order.status = u'Киоск выбран'
+    order.save()
+    out = u'киоск %s <br /> <a href="/finish/order/%s">ПРОДОЛЖИТЬ ОФОРМЛЕНИЕ</a>' % (kiosk.name, request.GET['order_id'])
     #except:
     #    out = 'object does not found'
 

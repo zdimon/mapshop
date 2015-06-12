@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <h1> {{ p.name }} </h1>
+
+ <div class="mapshop_product_detail">
+  <div class="mapshop_product_image">
+        {{ p.thumb }}
+  </div>
+
+  <div class="mapshop_product_info">
+        <p>Стоимость: {{ p.price }}</p>
+        <p>Описание: {{ p.description }}</p>
+        <span style="cursor: pointer" data-id-product="{{ p.id }}" class="add_to_cart"> Add this to cart </span><br>
+  </div>
+
+</div> 
+
+
+
+
+
+{% endblock %}

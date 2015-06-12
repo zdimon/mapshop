@@ -11,7 +11,7 @@ $(document).ready(function(){
         });   
         //**************************************************
 
-//// add to cart **************************
+        //// add to cart **************************
          $('.add_to_cart').on('click', function(e) {
             var idp = $(this).attr('data-id-product');          
             console.log(idp);
@@ -22,6 +22,19 @@ $(document).ready(function(){
             
         });   
         //**************************************************
+
+
+        //// del from cart **************************
+         $('#my_basket').on('click', '.del_product_from_cart', function(e) {
+            var idp = $(this).attr('data-id');          
+            console.log(idp);
+            e.preventDefault();
+            ajaxGet('/del/from/cart', { 'item_id': idp }, function(content){});
+            
+        });   
+        //**************************************************
+
+
 
         ajaxGet('/add/to/cart', { }, function(content){
                     

@@ -8,7 +8,9 @@
         <script type="text/javascript" src="{% static 'js/mydrive.js' %}"></script>
 </head>
 <body >
-<div id="my_basket" style="position: fixed; right: 0; top: 0; border: 1px dotted green;"> </div>>
+{% block my_basket %}
+<div id="my_basket" style="position: fixed; right: 0; top: 0; border: 1px dotted green;"> </div>
+{% endblock %}
 
 		        {% if user.is_authenticated %}
                   

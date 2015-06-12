@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from mapshop.forms import ProductFilterForm
-from mapshop.models import Category, Product, Kiosk, Order
-
+from mapshop.models import Category, Product, Kiosk, Order, Client, get_client_or_create
+from mapshop.forms import ClientForm
+from django.http import HttpResponseRedirect
 
 def home(request):
     context = {}
@@ -62,6 +63,14 @@ def product_list(request,slug='all'):
 
 
 
+def product_detail(request,slug):
+    u''' 
+        Детальная информация о товаре
+    '''
+    product = get_object_or_404(Product,name_slug=slug)
+    context = {'p': product}
+    return render_to_response('mapshop/product_detail.html', context, RequestContext(request))
+
 def kiosk_list(request,order_id=0):
     u''' 
         Отображение всех киосков 
@@ -74,4 +83,38 @@ def kiosk_list(request,order_id=0):
     #    pass
     context = {'kiosk_list': kiosk_list, 'title': title, 'order': order}
     return render_to_response('mapshop/kiosk_list.html', context, RequestContext(request))
+
+
+def finish_order(request,order_id):
+    u''' 
+        Заключительная фаза заказа с формой данных о клиенте
+    '''
+    order= get_object_or_404(Order,id=order_id)
+    if request.method == 'POST':
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            order.status = u'Ожидает оплаты'
+            order.session = 'done'
+            order.save()
+            return HttpResponseRedirect('/thanks/')
+    else:
+        if request.user.is_authenticated:
+            client = get_client_or_create(request.user)
+            form = ClientForm(instance=client)
+        else:
+            form = ClientForm()
+
+    context = {'o': order, 'form': form}
+    return render_to_response('mapshop/finish_order.html', context, RequestContext(request))
+
+
+def thanks(request):
+    u''' 
+        Страница благодарности
+    '''
+    context = {}
+    return render_to_response('mapshop/thanks.html', context, RequestContext(request))
+
+
 

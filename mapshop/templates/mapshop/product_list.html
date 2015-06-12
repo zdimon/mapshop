@@ -21,7 +21,7 @@
 
  <div class="product_list">
     {% for p in product_list %}
-        {{ p.thumb }} --- {{ p }} - {{ p.category }} - {{ p.rate }}  <span style="cursor: pointer" data-id-product="{{ p.id }}" data-user="{{ user.id }}" class="add_to_cart"> Add this to cart </span><br>
+        {{ p.thumb }} --- <a href="{{ p.get_absolute_url }}">{{ p }}</a> - {{ p.category }} - {{ p.rate }}  <span style="cursor: pointer" data-id-product="{{ p.id }}" data-user="{{ user.id }}" class="add_to_cart"> Add this to cart </span><br>
     {% endfor %}
  </div>
 

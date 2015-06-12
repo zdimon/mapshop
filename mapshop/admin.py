@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from mapshop.models import Product, Category, ProductImages, Kiosk, Order
+from mapshop.models import Product, Category, ProductImages, Kiosk, Order, OrderItem, Client
 from image_cropping import ImageCroppingMixin
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'thumb', 'price', 'rate', 'category')
+    list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category')
     list_filter = ('name', 'price', 'rate')
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -26,7 +26,24 @@ class ProductImagesAdmin(ImageCroppingMixin, admin.ModelAdmin):
 admin.site.register(ProductImages, ProductImagesAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('created_at', 'session', 'kiosk', 'status')
+    list_filter = ('status',)
 
 
 admin.site.register(Order, OrderAdmin)
+
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'order', 'ammount')
+
+
+admin.site.register(OrderItem, OrderItemAdmin)
+
+
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('name', 'surname', 'phone', 'email')
+
+
+admin.site.register(Client, ClientAdmin)
+
+

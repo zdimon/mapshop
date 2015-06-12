@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block my_basket %}{% endblock %}
+
+{% block content %}
+
+ <h1> Заказ № {{ o.id }} </h1>
+
+     <ul class='errorlist'>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                {% if field == '__all__' %}
+                <li class="alert alert-danger" >{{ error }}</li>
+                {% endif %}
+            {% endfor %}
+         {% endfor %}
+     </ul>
+ 
+ <div id="mapshop_client_form_private">
+    <h3> Форма для частных лиц </h3>
+    <form href="/finish/order/{{ o.id }}"  method="POST">
+    {% csrf_token %}
+    <div class="mapshop_form_row">
+        <label> {{ form.surname.label }} </label>
+        {{ form.surname }}
+        <span class="mapshop_form_error">{{ form.surname.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.name.label }} </label>
+        {{ form.name }}
+        <span class="mapshop_form_error">{{ form.name.errors }}</span>
+    </div>
+
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.phone.label }} </label>
+        {{ form.phone }}
+        <span class="mapshop_form_error">{{ form.phone.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.add_phone.label }} </label>
+        {{ form.add_phone }}
+        <span class="mapshop_form_error">{{ form.add_phone.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.email.label }} </label>
+        {{ form.email }}
+        <span class="mapshop_form_error">{{ form.email.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.birthday.label }} </label>
+        {{ form.birthday }}
+        <span class="mapshop_form_error">{{ form.birthday.errors }}</span>
+    </div>
+
+
+    
+    <input type="submit" value="Сохранить заказ">
+    </form>
+ </div>
+
+
+ <div id="mapshop_client_form_private">
+    <h3> Форма для юридических лиц </h3>
+
+    <form href="/finish/order/{{ o.id }}" method="POST">
+    {% csrf_token %}
+    <div class="mapshop_form_row">
+        <label> {{ form.surname.label }} </label>
+        {{ form.surname }}
+        <span class="mapshop_form_error">{{ form.surname.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.name.label }} </label>
+        {{ form.name }}
+        <span class="mapshop_form_error">{{ form.name.errors }}</span>
+    </div>
+
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.phone.label }} </label>
+        {{ form.phone }}
+        <span class="mapshop_form_error">{{ form.phone.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.add_phone.label }} </label>
+        {{ form.add_phone }}
+        <span class="mapshop_form_error">{{ form.add_phone.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.email.label }} </label>
+        {{ form.email }}
+        <span class="mapshop_form_error">{{ form.email.errors }}</span>
+    </div>
+
+
+
+
+
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.name_org.label }} </label>
+        {{ form.name_org }}
+        <span class="mapshop_form_error">{{ form.name_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.address_org.label }} </label>
+        {{ form.address_org }}
+        <span class="mapshop_form_error">{{ form.address_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.postal_index_org.label }} </label>
+        {{ form.postal_index_org }}
+        <span class="mapshop_form_error">{{ form.postal_index_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.inn_org.label }} </label>
+        {{ form.inn_org }}
+        <span class="mapshop_form_error">{{ form.inn_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.kpp_org.label }} </label>
+        {{ form.kpp_org }}
+        <span class="mapshop_form_error">{{ form.kpp_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.account_org.label }} </label>
+        {{ form.account_org }}
+        <span class="mapshop_form_error">{{ form.account_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.bank_org.label }} </label>
+        {{ form.bank_org }}
+        <span class="mapshop_form_error">{{ form.bank_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.cor_account_org.label }} </label>
+        {{ form.cor_account_org }}
+        <span class="mapshop_form_error">{{ form.cor_account_org.errors }}</span>
+    </div>
+
+
+    <div class="mapshop_form_row">
+        <label> {{ form.bik_org.label }} </label>
+        {{ form.bik_org }}
+        <span class="mapshop_form_error">{{ form.bik_org.errors }}</span>
+    </div>
+
+    <input type="submit" value="Сохранить заказ">
+    </form>
+
+ </div>
+
+
+
+{% endblock %}

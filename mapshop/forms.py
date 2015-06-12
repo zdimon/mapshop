@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.utils.safestring import mark_safe
-from mapshop.models import Category, Product
+from mapshop.models import Category, Product, Client
+from django.forms import ModelForm
+
+
+
+
+class ClientForm(ModelForm):
+    class Meta:
+        model = Client
+
+
+
 
 __author__ = '1'
 from django import forms

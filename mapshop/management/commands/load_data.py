@@ -36,7 +36,8 @@ class Command(BaseCommand):
                 p.category = o
                 p.price = n
                 p.rate = randint(0,90)
-                p.name = 'Product %s' % n
+                p.name = 'Product %s %s' % (n,o.name)
+                p.description = u'Описание продукта %s из категории %s у которого рейтинг %s' % (p.name,o.name,p.rate)
                 p.save()
                 for im in range(3):
                     path = 'fixture/test.jpg'
@@ -76,13 +77,7 @@ class Command(BaseCommand):
         o.save()
         print 'order was created'
 
-        try:
-            user = User.objects.get(username='admin')
-            p = Client()
-            p.user_id = user.id
-            p.save()
-        except:
-            print 'you have to create admin'
+      
 
         print 'done'
 

@@ -15,6 +15,8 @@ class Kiosk(models.Model):
     longitude = models.FloatField()
     name = models.CharField(max_length=200)
     scheduler = models.CharField(max_length=200, default='с 9 до 6 в будни')
+    def __unicode__(self):
+        return self.name
 
 class Category(models.Model):
     ''' Класс категори товаров'''
@@ -38,6 +40,9 @@ class Product(models.Model):
     available = models.BooleanField(default=False) 
     rate = models.PositiveSmallIntegerField(default=0)
     category = models.ForeignKey(Category, null=True, blank=True)
+    name_slug = models.CharField(verbose_name='Name slug',max_length=250, blank=True)
+    def get_absolute_url(self):
+       return reverse("product_detail", kwargs={"slug": self.name_slug})
     @property
     def thumb(self):
         image = ProductImages.objects.get(is_main=True,product=self)
@@ -50,6 +55,10 @@ class Product(models.Model):
         return mark_safe(u'<img src="%s" />' % thumbnail_url)
     def __unicode__(self):
         return self.name
+    def save(self, **kwargs):
+        if not self.id:
+            self.name_slug = pytils.translit.slugify(self.name)
+        return super(Product, self).save(**kwargs)
 
 
 
@@ -82,36 +91,26 @@ class ProductImages(models.Model):
    
 class Client(models.Model):
     u''' Класс Клиент содержит данные о клиенте (емайл, телефон, параметр уведомления по емайлу, параметр уведомления по телефону)  '''
-    TREATMENTS = (
-        (u'Уважаемый', u'Уважаемый'),
-        (u'Уважаемая', u'Уважаемая'),
-
-    )
-
-    treatment = models.CharField(verbose_name=u'Формат обращения',
-                                    choices=TREATMENTS,
-                                    default=u'Уважаемый',
-                                    max_length=10)
-    surname = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=100, null=True, blank=True)
-    phone = models.CharField(max_length=11, null=True, blank=True)
-    add_phone = models.CharField(max_length=11, null=True, blank=True)
-    email = models.EmailField()
-    birthday = models.DateField()
-    notice_email = models.BooleanField()
-    notice_phone = models.BooleanField()
+    surname = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'Фамилия')
+    name = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'Имя')
+    phone = models.CharField(max_length=11, null=True, blank=True, verbose_name=u'Телефон')
+    add_phone = models.CharField(max_length=11, null=True, blank=True, verbose_name=u'Дополнительный телефон')
+    email = models.EmailField(verbose_name=u'Email')
+    birthday = models.DateField(null=True, blank=True, verbose_name=u'Дата рождения')
+    notice_email = models.BooleanField(default=True, verbose_name=u'Email для уведомлений')
+    notice_phone = models.BooleanField(default=True, verbose_name=u'Телефон для СМС уведомлений')
     created_at = models.DateTimeField(auto_now_add=True)
-    is_organization = models.BooleanField(default='True')
-    name_org = models.CharField(max_length=100)
-    address_org = models.CharField(max_length=200)
-    postal_index_org = models.CharField(max_length=10)
-    inn_org = models.CharField(max_length=10)
-    kpp_org = models.CharField(max_length=10)
-    account_org = models.CharField(max_length=16)
-    bank_org = models.CharField(max_length=100)
-    cor_account_org = models.CharField(max_length=16)
-    bik_org = models.CharField(max_length=9)
-    user_id = models.IntegerField(default=0)
+    is_organization = models.BooleanField(default='True', verbose_name=u'Организация?')
+    name_org = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'Наименование организации')
+    address_org = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'Юридический адрес организации')
+    postal_index_org = models.CharField(max_length=10, null=True, blank=True, verbose_name=u'Почтовый индекс')
+    inn_org = models.CharField(max_length=10, null=True, blank=True, verbose_name=u'ИНН')
+    kpp_org = models.CharField(max_length=10, null=True, blank=True, verbose_name=u'КПП')
+    account_org = models.CharField(max_length=16, null=True, blank=True, verbose_name=u'Р/с')
+    bank_org = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'Банк')
+    cor_account_org = models.CharField(max_length=16, null=True, blank=True, verbose_name=u'Корр. счет')
+    bik_org = models.CharField(max_length=9, null=True, blank=True, verbose_name=u'БИК')
+    user_id = models.IntegerField(default=0, null=True, blank=True, verbose_name=u'Пользователь')
 
 
 
@@ -141,9 +140,26 @@ class OrderItem(models.Model):
     order = models.ForeignKey('Order')
     product = models.ForeignKey('Product') 
     created_at = models.DateTimeField(auto_now_add=True)
+    ammount = models.IntegerField(default=1)
     
 
 class Preorder(models.Model):
     u'''Предзаказ содержит данные о предзаказах по клиентам'''
     product = models.ForeignKey('Product')
     client =  models.ForeignKey('Client')
+
+
+
+def get_client_or_create(user):
+    try:
+        c = Client.objects.get(user_id=user.id)
+    except:
+        c = Client()
+        c.name = user.username
+        c.email = user.email
+        c.save()
+    return c
+    
+
+
+
