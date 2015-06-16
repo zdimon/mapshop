@@ -5,8 +5,9 @@ from mapshop.models import Product, Category, ProductImages, Kiosk, Order, Order
 from image_cropping import ImageCroppingMixin
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category')
+    list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category', 'available')
     list_filter = ('name', 'price', 'rate')
+    list_editable = ('available',)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_slug')

@@ -13,3 +13,4 @@ Sphinx
 djangoajax==2.2.12
 pytils
 django-debug-toolbar
+redis==2.10.1

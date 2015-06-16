@@ -34,6 +34,11 @@ class Category(models.Model):
 
 class Product(models.Model):
     u''' Класс Продукт содержит данные о товарах (имя, фото, цену, описание, наличие товара)'''
+    __original_available = None
+
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        self.__original_available = self.available
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=u"Стоимость (руб)")
     description = models.CharField(max_length=200)
@@ -56,8 +61,11 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
     def save(self, **kwargs):
+        from mapshop.tasks import test_task
         if not self.id:
             self.name_slug = pytils.translit.slugify(self.name)
+        if self.available != self.__original_available:
+            test_task.delay(self)
         return super(Product, self).save(**kwargs)
 
 
@@ -160,6 +168,14 @@ def get_client_or_create(user):
         c.save()
     return c
     
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+@receiver(post_save, sender = Order)
+def manage_with_order(instance, **kwargs):
+    print 'work with order %s' % instance.pk
+
+
 
 
 

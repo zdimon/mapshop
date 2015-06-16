@@ -32,6 +32,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         'django.core.context_processors.media',
         'django.core.context_processors.static',
         'django.contrib.messages.context_processors.messages',
+        'config.my_context_processor.my_context_processor',
 
 )
 
@@ -58,8 +59,14 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'image_cropping',
     'debug_toolbar',
+    'djcelery',
     
 )
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://localhost:6379/0'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,7 +75,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'config.mymiddleware.TemplateInjector',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    
 )
 
 ROOT_URLCONF = 'config.urls'
@@ -127,4 +136,23 @@ STATICFILES_FINDERS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = '/'
+
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+]
+
+
 

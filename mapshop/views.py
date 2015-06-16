@@ -7,8 +7,16 @@ from mapshop.models import Category, Product, Kiosk, Order, Client, get_client_o
 from mapshop.forms import ClientForm
 from django.http import HttpResponseRedirect
 
+
+import django.dispatch
+payment_done = django.dispatch.Signal(providing_args=["order_id"])
+
+
+
 def home(request):
     context = {}
+    payment_done.send(None,order_id=12)
+    print 'my var %s ' % request.supervar
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
 
