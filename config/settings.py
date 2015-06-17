@@ -60,7 +60,7 @@ INSTALLED_APPS = (
     'image_cropping',
     'debug_toolbar',
     'djcelery',
-    
+    'django.contrib.sites',
 )
 
 import djcelery
@@ -151,8 +151,12 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.signals.SignalsPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'fixture/test_mail')
+SITE_ID = 1
 
 

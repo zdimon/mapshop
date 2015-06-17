@@ -1,5 +1,49 @@
 $(document).ready(function(){
 
+        $('#show_predorder_form').on('click')
+
+
+
+        //// show order history **************************
+         $('#mapshop_show_order_history').on('click', function(e) {
+
+            ajaxGet('/cart/show', { }, function(content){
+                   
+            });
+            
+        });   
+        //**************************************************
+
+
+
+
+        //// show preorder form **************************
+         $('#show_predorder_form').on('click', function(e) {
+
+            $('#predorder_form').show();
+    
+        });   
+        //**************************************************
+
+
+
+        //// handle with preorder form **************************
+         $('#mapshop_preorder_save').on('click', function(e) {
+
+    
+            var product_id = $('#mapshop_product_id').val(); 
+            var phone = $('#mapshop_preorder_phone').val(); 
+            var email = $('#mapshop_preorder_email').val();          
+            e.preventDefault();
+            ajaxGet('/preorder/save', { 'phone': phone, 'email': email, 'product_id': product_id }, function(content){
+                   
+            });
+            
+        });   
+        //**************************************************
+
+
+
        //// Test **************************
          $('#test').on('click', function(e) {
           
@@ -22,6 +66,10 @@ $(document).ready(function(){
             
         });   
         //**************************************************
+
+
+
+
 
 
         //// del from cart **************************
