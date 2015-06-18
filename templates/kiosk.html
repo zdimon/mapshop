@@ -1,0 +1,33 @@
+<p>Подробная информация по выбранному киоску {{ kiosk_name }}</p>
+<table width="100%" cellpadding="4" cellspacing="0">
+	<col width="85*">
+	<col width="85*">
+	<col width="85*">
+	<tr valign="top">
+		<td width="33%">
+			<p>Адрес</p>
+		</td>
+		<td width="33%">
+			<p>График работы</p>
+		</td>
+		<td rowspan="2" width="33%">
+			<p><br>
+<Img src="{{ MEDIA_URL }}{{ kiosk_foto }}" Width="300" Height="300">
+			</p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="33%">
+			<p><br>
+{{ kiosk_address }}
+			</p>
+		</td>
+		<td width="33%">
+			<p><br>
+{{ kiosk_scheduler }}
+			</p>
+		</td>
+	</tr>
+</table>
+
+<br /> <a href="/finish/order/{{order_id}}">ПРОДОЛЖИТЬ ОФОРМЛЕНИЕ</a>
