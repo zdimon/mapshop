@@ -13,9 +13,38 @@
         <p>Стоимость: {{ p.price }}</p>
         <p>Описание: {{ p.description }}</p>
         <span style="cursor: pointer" data-id-product="{{ p.id }}" class="add_to_cart"> Add this to cart </span><br>
+
+        <p>
+            {% if p.ammount > 0 %}
+                Наличие на складе (кол-во): {{ p.ammount }} шт.
+            {% else %}
+            <a href="#" onclick="return false" id="show_predorder_form"> Сообщите мне о появлении заказа </a>
+            <div id="predorder_form" style="display: none">
+                    Извините, но в настоящий моммент товар отсутствует на складе. Мы можем уведомить вас когда он появится если вы заполните форму ниже и сохраните ее.
+
+                 <div id="error" style="color: red"></div>
+                 <div id="message" style="color: green"></div>
+                 <input id="mapshop_product_id" type="hidden" value="{{ p.id }}" >
+                 <p>Ваш email: <input id="mapshop_preorder_email" ></p>
+                 <p>Ваш телефон (для SMS информирования): <input id="mapshop_preorder_phone" ></p>
+                 <p><a href="#" onclick="return false" id="mapshop_preorder_save">  Сохранить </a></p>
+
+                {% endif %}
+            </div>
+        </p>
+
   </div>
 
 </div> 
+
+<div class="mapshop_similar">
+    <h3> Похожие товары </h3>
+    {% for i in similar %}
+      <div class="mapshop_similar_item">
+        <a title="{{ i }}" href="{{ i.get_absolute_url }}">{{ i.thumb }}</a>
+      </div>
+    {% endfor %}
+</div>
 
 
 

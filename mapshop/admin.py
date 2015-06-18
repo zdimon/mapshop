@@ -1,12 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from mapshop.models import Product, Category, ProductImages, Kiosk, Order, OrderItem, Client
+from mapshop.models import Product, Category, ProductImages, Kiosk, Order, OrderItem, Client, Preorder
 from image_cropping import ImageCroppingMixin
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category')
+    list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category', 'ammount')
     list_filter = ('name', 'price', 'rate')
+    list_editable = ('ammount',)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_slug')
@@ -26,7 +27,7 @@ class ProductImagesAdmin(ImageCroppingMixin, admin.ModelAdmin):
 admin.site.register(ProductImages, ProductImagesAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('created_at', 'session', 'kiosk', 'status')
+    list_display = ('created_at', 'session', 'kiosk', 'client', 'status')
     list_filter = ('status',)
 
 
@@ -41,9 +42,16 @@ admin.site.register(OrderItem, OrderItemAdmin)
 
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'surname', 'phone', 'email')
+    list_display = ('name', 'surname', 'phone', 'email', 'kiosk')
 
 
 admin.site.register(Client, ClientAdmin)
+
+class PreorderAdmin(admin.ModelAdmin):
+    list_display = ('product', 'contact', 'type', 'created_at')
+    list_filter = ('type',)
+
+admin.site.register(Preorder, PreorderAdmin)
+
 
 

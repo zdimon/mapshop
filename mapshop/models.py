@@ -34,10 +34,15 @@ class Category(models.Model):
 
 class Product(models.Model):
     u''' Класс Продукт содержит данные о товарах (имя, фото, цену, описание, наличие товара)'''
+    __original_ammount = None
+
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        self.__original_ammount = self.ammount
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=u"Стоимость (руб)")
     description = models.CharField(max_length=200)
-    available = models.BooleanField(default=False) 
+    ammount = models.PositiveSmallIntegerField(default=0) 
     rate = models.PositiveSmallIntegerField(default=0)
     category = models.ForeignKey(Category, null=True, blank=True)
     name_slug = models.CharField(verbose_name='Name slug',max_length=250, blank=True)
@@ -56,8 +61,12 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
     def save(self, **kwargs):
+        from mapshop.tasks import test_task
         if not self.id:
             self.name_slug = pytils.translit.slugify(self.name)
+        if self.ammount != self.__original_ammount and self.__original_ammount==0:
+            test_task.delay(self)
+            self.__original_ammount = self.ammount
         return super(Product, self).save(**kwargs)
 
 
@@ -111,7 +120,9 @@ class Client(models.Model):
     cor_account_org = models.CharField(max_length=16, null=True, blank=True, verbose_name=u'Корр. счет')
     bik_org = models.CharField(max_length=9, null=True, blank=True, verbose_name=u'БИК')
     user_id = models.IntegerField(default=0, null=True, blank=True, verbose_name=u'Пользователь')
-
+    kiosk = models.ForeignKey('Kiosk', null=True, blank=True)
+    def __unicode__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -133,6 +144,12 @@ class Order(models.Model):
     kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     session = models.CharField(max_length=250, null=True, blank=True)
+    @property
+    def total(self):
+        t = 0
+        for i in self.orderitem_set.all():
+            t = t + (i.product.price*i.ammount)
+        return t
     
 
 class OrderItem(models.Model):
@@ -145,8 +162,19 @@ class OrderItem(models.Model):
 
 class Preorder(models.Model):
     u'''Предзаказ содержит данные о предзаказах по клиентам'''
+    TYPE = (
+        ('phone', 'phone'),
+        ('email', 'email'),
+    )
     product = models.ForeignKey('Product')
-    client =  models.ForeignKey('Client')
+    contact =  models.CharField(max_length=250, null=True, blank=True)
+    type = models.CharField(verbose_name=u'Тип предзаказа',
+                                    choices=TYPE,
+                                    default='email',
+                                    max_length=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ('product', 'contact', 'type')
 
 
 
@@ -157,9 +185,18 @@ def get_client_or_create(user):
         c = Client()
         c.name = user.username
         c.email = user.email
+        c.user_id = user.id
         c.save()
     return c
     
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+@receiver(post_save, sender = Order)
+def manage_with_order(instance, **kwargs):
+    print 'work with order %s' % instance.pk
+
+
 
 
 

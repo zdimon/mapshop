@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load cart %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,9 @@
         <script type="text/javascript" src="{% static 'js/mydrive.js' %}"></script>
 </head>
 <body >
+
+
+
 {% block my_basket %}
 <div id="my_basket" style="position: fixed; right: 0; top: 0; border: 1px dotted green;"> </div>
 {% endblock %}

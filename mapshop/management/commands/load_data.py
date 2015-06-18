@@ -8,6 +8,7 @@ from django.core.files import File
 from random import randint
 import csv
 from django.contrib.auth.models import User
+from mapshop.management.commands.utils import *
 
 #logger = logging.getLogger(__name__)
 
@@ -17,12 +18,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         
         print 'start'
-        Kiosk.objects.all().delete()
+        
         ProductImages.objects.all().delete()
         Product.objects.all().delete()
         Category.objects.all().delete()
         Order.objects.all().delete()
         Client.objects.all().delete()
+        User.objects.all().exclude(username='admin').delete()
         l = [ 'food','slippers']
         
         for i in l:
@@ -51,31 +53,15 @@ class Command(BaseCommand):
                     im.save()
                     print 'process with image %s' % im
                 print 'process with %s' % n
-        input_file = open("kiosk.csv", "rb")
-        rdr = csv.DictReader(input_file, delimiter=';', fieldnames=['mnemonic', 'name', 'address','latitude','longitude'])
-        for rec in rdr:
-            #try:
-            k = Kiosk()
-            k.mnemonic = rec['mnemonic']
-            k.name = rec['name']
-            k.address = rec['address']
-            k.latitude = rec['latitude']
-            k.longitude = rec['longitude']
-            path = 'fixture/kiosk.jpg'
-            #import pdb; pdb.set_trace()
-            name = 'kiosk.jpg'
-            print 'Test Hi'
-            f = open(path, 'r')
-            file = File(f)
-            k.foto.save(name,file)
-            k.save()
-            #except:
-            #	print 'Error'
-        input_file.close()
-
-        o = Order()
-        o.save()
-        print 'order was created'
+        
+        for u in ['dima','viktor','alex']:
+            client = create_user(u)
+            product = Product.objects.get(pk=1)
+            create_preloader(client, product)
+            
+        #o = Order()
+        #o.save()
+        #print 'order was created'
 
       
 

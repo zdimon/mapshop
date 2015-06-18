@@ -7,8 +7,16 @@ from mapshop.models import Category, Product, Kiosk, Order, Client, get_client_o
 from mapshop.forms import ClientForm
 from django.http import HttpResponseRedirect
 
+
+import django.dispatch
+payment_done = django.dispatch.Signal(providing_args=["order_id"])
+
+
+
 def home(request):
     context = {}
+    payment_done.send(None,order_id=12)
+    print 'my var %s ' % request.supervar
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
 
@@ -19,6 +27,7 @@ def product_list(request,slug='all'):
     '''
     # initialization
     cur_rate_order = 'asc'
+    cur_rate_price = 'asc'
     # get all products
     products = Product.objects.all()
     if slug=='all':
@@ -47,6 +56,17 @@ def product_list(request,slug='all'):
     except:
         pass
 
+    try:
+        rate_price = request.GET['price_order']
+        if rate_price == 'desc':
+            products = products.order_by('-price')
+            cur_rate_price = 'desc'
+        else:
+            products = products.order_by('price')  
+            cur_rate_price = 'asc'
+    except:
+        pass
+
     #category = Course.objects.get(name=category_name)
     #Author.objects.order_by('-score')[:30]
 
@@ -58,7 +78,7 @@ def product_list(request,slug='all'):
     return render_to_response('product_list.html', data, RequestContext(request))
     '''
 
-    context = {'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order}
+    context = {'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order, 'cur_rate_price': cur_rate_price}
     return render_to_response('mapshop/product_list.html', context, RequestContext(request))
 
 
@@ -67,8 +87,9 @@ def product_detail(request,slug):
     u''' 
         Детальная информация о товаре
     '''
-    product = get_object_or_404(Product,name_slug=slug)
-    context = {'p': product}
+    product = get_object_or_404(Product,name_slug=slug) 
+    similar = Product.objects.filter(category=product.category).order_by('-rate')[0:20]
+    context = {'p': product, 'similar': similar}
     return render_to_response('mapshop/product_detail.html', context, RequestContext(request))
 
 def kiosk_list(request,order_id=0):
