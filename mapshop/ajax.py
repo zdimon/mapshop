@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django_ajax.decorators import ajax
+from django.shortcuts import render
 from mapshop.models import Category, Product, Kiosk, Order, OrderItem, get_client_or_create
 
 
@@ -73,7 +74,6 @@ def get_basket_html_by_session_key(session):
 
 @ajax
 def getinfo_kiosk(request):
-    '''   '''
     print '----------------------------------%s' % request.GET['kiosk_id']
     out = ''
     #try:
@@ -82,13 +82,19 @@ def getinfo_kiosk(request):
     order.kiosk = kiosk
     order.status = u'Киоск выбран'
     order.save()
-    out = u'киоск %s <br /> <a href="/finish/order/%s">ПРОДОЛЖИТЬ ОФОРМЛЕНИЕ</a>' % (kiosk.name, request.GET['order_id'])
+    context = {'kiosk_name' : kiosk.name,
+               'kiosk_address' : kiosk.address,
+               'kiosk_scheduler' : kiosk.scheduler,
+               'order_id' : request.GET['order_id'],
+               'kiosk_foto' : kiosk.foto,
+              }
+    out = render(request, 'kiosk.html', context)
     #except:
     #    out = 'object does not found'
-
+  
     data = {
-            'inner-fragments': { '#kiosk_info': out },       
-           }     
+            'inner-fragments': { '#kiosk_info': out }
+           }
     return data
 
 '''
