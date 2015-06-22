@@ -8,3 +8,4 @@ supervisord.pid
 /static/*
 celerybeat-schedule
 /.idea
+fixture/test_mail
