@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 
 # Register your models here.
@@ -11,7 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('ammount',)
 
 class CategoryAdmin(MPTTModelAdmin):
-    list_display = ('name', 'name_slug')
+    list_display = ('name', 'name_slug', 'level', 'parent')
 
 class KioskAdmin(ImageCroppingMixin, admin.ModelAdmin):
     pass
@@ -27,9 +28,17 @@ class ProductImagesAdmin(ImageCroppingMixin, admin.ModelAdmin):
 
 admin.site.register(ProductImages, ProductImagesAdmin)
 
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    verbose_name_plural = u'Элементы'
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('created_at', 'session', 'kiosk', 'client', 'status')
     list_filter = ('status',)
+    inlines = [
+        OrderItemInline,
+    ]
 
 
 admin.site.register(Order, OrderAdmin)

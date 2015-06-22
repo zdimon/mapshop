@@ -6,6 +6,9 @@ from easy_thumbnails.files import get_thumbnailer
 import pytils
 from django.core.urlresolvers import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+from django.db.models.signals import post_save
+
+
 
 
 class Kiosk(models.Model):
@@ -142,7 +145,7 @@ class Order(models.Model):
     status = models.CharField(verbose_name=u'Статус заказа',
                                     choices=STATUSES,
                                     default=u'Новый',
-                                    max_length=10)
+                                    max_length=20)
     client = models.ForeignKey('Client', null=True, blank=True) 
     kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -195,9 +198,14 @@ def get_client_or_create(user):
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 @receiver(post_save, sender = Order)
 def manage_with_order(instance, **kwargs):
-    print 'work with order %s' % instance.pk
+    print '---------------------------------------work with order %s' % instance.pk
+
+
+
+
 
 
 

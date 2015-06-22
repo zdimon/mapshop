@@ -35,3 +35,17 @@ def product_edit(request):
     }
     outdata = simplejson.dumps(out)
     return HttpResponse(outdata, mimetype='application/json')
+
+
+
+@csrf_exempt
+def product_bye(request):
+    indata = simplejson.loads(request.body)
+    print 'bye %s ammount %s ' % (indata['product_id'], indata['ammount'])
+    out = {
+        'status': 0,
+        'message': 'Ok',
+    }
+    outdata = simplejson.dumps(out)
+    return HttpResponse(outdata, mimetype='application/json')
+
