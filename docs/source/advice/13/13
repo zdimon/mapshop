@@ -1,0 +1,9 @@
+Иерархия.
+
+django-mptt==0.5.5
+
+from mptt.models import MPTTModel, TreeForeignKey
+
+class Catalog(MPTTModel):
+    ......
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)

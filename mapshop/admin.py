@@ -3,13 +3,14 @@ from django.contrib import admin
 # Register your models here.
 from mapshop.models import Product, Category, ProductImages, Kiosk, Order, OrderItem, Client
 from image_cropping import ImageCroppingMixin
+from mptt.admin import MPTTModelAdmin
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_slug', 'thumb', 'price', 'rate', 'category', 'available')
     list_filter = ('name', 'price', 'rate')
     list_editable = ('available',)
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'name_slug')
 
 class KioskAdmin(ImageCroppingMixin, admin.ModelAdmin):

@@ -5,6 +5,8 @@ from django.utils.safestring import mark_safe
 from easy_thumbnails.files import get_thumbnailer
 import pytils
 from django.core.urlresolvers import reverse
+from mptt.models import MPTTModel, TreeForeignKey
+
 
 class Kiosk(models.Model):
     u''' Класс Киоск содержит все данные о киоске (адрес, фото, мнемонику, широту, долготу) '''
@@ -18,10 +20,11 @@ class Kiosk(models.Model):
     def __unicode__(self):
         return self.name
 
-class Category(models.Model):
+class Category(MPTTModel):
     ''' Класс категори товаров'''
     name = models.CharField(max_length=200)
     name_slug = models.CharField(verbose_name='Name slug',max_length=250, blank=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     def get_absolute_url(self):
        return reverse("catalog_filter", kwargs={"slug": self.name_slug})
     def __unicode__(self):
