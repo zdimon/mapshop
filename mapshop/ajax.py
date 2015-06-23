@@ -81,7 +81,7 @@ def add_product_to_cart(request):
         except:
             order = Order()
             order.session = session
-            if request.user.is_authenticated:
+            if request.user.is_authenticated():
                 client = get_client_or_create(request.user)
                 order.client = client
             order.save()
@@ -138,7 +138,7 @@ def getinfo_kiosk(request):
     #try:
     kiosk = Kiosk.objects.get(pk=request.GET['kiosk_id'])
     order = Order.objects.get(pk=request.GET['order_id'])
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         client = Client.objects.get(user_id=request.user.id)
         client.kiosk = kiosk
         client.save()

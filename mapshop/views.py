@@ -114,13 +114,13 @@ def finish_order(request,order_id):
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if form.is_valid():
-            form.save()
+            client = form.save()
             order.status = u'Ожидает оплаты'
             order.session = 'done'
             order.save()
             return HttpResponseRedirect('/thanks/')
     else:
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             client = get_client_or_create(request.user)
             form = ClientForm(instance=client)
         else:
