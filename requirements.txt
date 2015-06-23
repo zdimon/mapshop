@@ -14,5 +14,7 @@ djangoajax==2.2.12
 pytils
 django-debug-toolbar
 redis==2.10.1
+django-mptt==0.5.5
 termcolor
 requests
+

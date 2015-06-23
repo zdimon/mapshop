@@ -30,10 +30,17 @@ class Command(BaseCommand):
             av = '0'
         data = {'product_id': '1', 'ammount': av}
         mess = '****request to change availability of %s to None' % product
-        url = 'http://localhost:8000/api/product/edit'
+        url = 'http://localhost:8008/api/product/edit'
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         responce = requests.post(url, data=json.dumps(data), headers=headers).content
         print colored(responce, 'white')
         print colored('stop test API', 'red', attrs=['reverse', 'blink'])
+
+        data = {'product_id': '1', 'ammount': '2'}
+        mess = '****request to to bye '
+        url = 'http://localhost:8008/api/product/bye'
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        responce = requests.post(url, data=json.dumps(data), headers=headers).content
+        print colored(responce, 'white')
 
        
