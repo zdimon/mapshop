@@ -20,6 +20,7 @@ urlpatterns = patterns( '',
     url(r'^getinfo/kiosk$', 'mapshop.ajax.getinfo_kiosk'),
     url(r'^preorder/save$', 'mapshop.ajax.preorder_save'),
     url(r'^cart/show$', 'mapshop.ajax.cart_show'),
+    url(r'^mapshop/search/kiosk$', 'mapshop.ajax.search_kiosk'),
 
 
     ##################API REQUESTS############################

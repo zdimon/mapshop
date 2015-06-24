@@ -4,6 +4,28 @@ from django.shortcuts import render
 from mapshop.models import Category, Product, Kiosk, Order, OrderItem, get_client_or_create, Preorder, Client
 
 
+
+@ajax
+def search_kiosk(request):
+    '''  Поиск киосков '''
+    out = ''
+    key = request.GET['key']
+    order_id = request.GET['order_id']
+    #try:
+    ks = Kiosk.objects.filter(name__icontains=key)
+    if ks.count() > 0:
+        for k in ks:
+            out = out + '<p> <a href="#" onclick="return: false" class="mapshop_search_rezult" data-kiosk-id="%s" data-order-id=%s>%s </a> </p>' % (k.id, order_id, k.name)
+    else:
+        out = u'<p>По строке %s ничего не найдено</p>' % key
+    #except:
+    #    out = '<p>По строке %s ничего не найдено</p>'
+    data = {
+            'inner-fragments': { '#mapshop_search_rezult': out},       
+           } 
+    return data 
+
+
 def get_cart_html(user):
     out = u'<h3> История заказов </h3>'
     out = out + u'<table class="mapshop_cart_table"><tr> <th>Дата</th> <th>Перечень товаров</th> <th>Общая стоимость</th> <th>Статус</th> </tr>'

@@ -88,5 +88,33 @@ $(document).ready(function(){
                     
             });
 
+//// ********BIND SEARCH INPUT TO AJAX FUNC*************
+
+$('#mapshop_search_kiosk').on('input',function(e){
+    var key = $(this).val();
+    var order_id = $(this).attr('data-order-id');
+    if(key.length>0) {
+        $("#mapshop_ajax_indicator").show();
+        ajaxGet('/mapshop/search/kiosk', { 'key': key, 'order_id': order_id }, function(content){
+         $("#mapshop_ajax_indicator").hide();
+        }); 
+    }
+});
+
+//*************************************************
+
+//// ********BIND CLICK ON SEARCH REZULT*************
+
+$('#mapshop_search_rezult').on('click', '.mapshop_search_rezult', function(e) {
+
+     var kiosk_id = $(this).attr('data-kiosk-id');
+     var order_id = $(this).attr('data-order-id');
+     ajaxGet('/getinfo/kiosk', { 'kiosk_id': kiosk_id, 'order_id': order_id }, function(content){});
+
+
+});
+
+//*************************************************
+
 
 })
