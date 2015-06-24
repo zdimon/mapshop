@@ -38,8 +38,13 @@ class Command(BaseCommand):
             try:
                 cat = Category.objects.get(name=rec['cat'].decode('utf-8'))
             except:
-    
                 cat = Category.objects.create(name=rec['cat'].decode('utf-8'), parent=root)
+
+            try:
+                subcat = Category.objects.get(name=rec['subcat'].decode('utf-8'))
+            except:
+                subcat = Category.objects.create(name=rec['subcat'].decode('utf-8'), parent=cat)
+
             p = Product()
             p.name = rec['name'].decode('utf-8')
             p.category = cat
