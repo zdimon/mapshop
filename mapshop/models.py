@@ -74,6 +74,9 @@ class Product(models.Model):
             test_task.delay(self)
             self.__original_ammount = self.ammount
         return super(Product, self).save(**kwargs)
+    @property
+    def get_other_images_except_main(self):
+        return ProductImages.objects.filter(is_main=False,product=self)
 
 
 

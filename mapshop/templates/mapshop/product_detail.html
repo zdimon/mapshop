@@ -7,6 +7,14 @@
  <div class="mapshop_product_detail">
   <div class="mapshop_product_image">
         {{ p.thumb }}
+        {% if p.get_other_images_except_main.count > 0 %}
+            <h3>Галлерея</h3>
+            <ul class="mapshop_product_gallery">
+                {% for i in p.get_other_images_except_main %}
+                    <li>{{ i.thumb }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
   </div>
 
   <div class="mapshop_product_info">
