@@ -6,7 +6,7 @@ from mapshop.forms import ProductFilterForm
 from mapshop.models import Category, Product, Kiosk, Order, Client, get_client_or_create
 from mapshop.forms import ClientForm
 from django.http import HttpResponseRedirect
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import django.dispatch
 payment_done = django.dispatch.Signal(providing_args=["order_id"])
@@ -27,9 +27,10 @@ def product_list(request,slug='all'):
     '''
     # initialization
     cur_rate_order = 'asc'
-    cur_rate_price = 'asc'
+    cur_price_order = 'asc'
     # get all products
     products = Product.objects.all()
+    
     if slug=='all':
         title = 'Все товары'
         # select all categories 
@@ -60,10 +61,10 @@ def product_list(request,slug='all'):
         rate_price = request.GET['price_order']
         if rate_price == 'desc':
             products = products.order_by('-price')
-            cur_rate_price = 'desc'
+            cur_price_order = 'desc'
         else:
             products = products.order_by('price')  
-            cur_rate_price = 'asc'
+            cur_price_order = 'asc'
     except:
         pass
 
@@ -77,8 +78,17 @@ def product_list(request,slug='all'):
     data = dict(filter_form=filter_form)
     return render_to_response('product_list.html', data, RequestContext(request))
     '''
-
-    context = {'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order, 'cur_rate_price': cur_rate_price}
+    products = Paginator(products, 5)
+    page = request.GET.get('page')
+    try:
+        products = products.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        products = products.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        products = products.page(paginator.num_pages)
+    context = {'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order, 'cur_price_order': cur_price_order}
     return render_to_response('mapshop/product_list.html', context, RequestContext(request))
 
 

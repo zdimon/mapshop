@@ -14,7 +14,7 @@
 
 
  <div class="ordering">
-    {% if cur_rate_price == 'desc' %}
+    {% if cur_price_order == 'desc' %}
         <a href="?price_order=asc">по цене вверх</a>
     {% else %}
         <a href="?price_order=desc">по цене вниз</a>
@@ -35,7 +35,21 @@
     {% endfor %}
  </div>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if product_list.has_previous %}
+            <a href="?page={{ product_list.previous_page_number }}&rate_order={{cur_rate_order}}&price_order={{cur_price_order}}">Назад</a>
+        {% endif %}
 
+        <span class="current">
+            Page {{ product_list.number }} of {{ product_list.paginator.num_pages }}.
+        </span>
+
+        {% if product_list.has_next %}
+            <a href="?page={{ product_list.next_page_number }}&rate_order={{cur_rate_order}}&price_order={{cur_price_order}}">Вперед</a>
+        {% endif %}
+    </span>
+</div>
 
 
 {% endblock %}
