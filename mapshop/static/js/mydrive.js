@@ -117,4 +117,31 @@ $('#mapshop_search_rezult').on('click', '.mapshop_search_rezult', function(e) {
 //*************************************************
 
 
+
+
+//// ********SWITCH BEATWEEN PRIVATE AND juridical person form*************
+
+$('#mapshop_show_private_form').on('click', function(e) {
+   $(this).hide();
+   $('#mapshop_show_juridical_form').show();
+   $('#mapshop_client_form_private').show();
+   $('#mapshop_client_form_juridical').hide();
+
+});
+
+
+$('#mapshop_show_juridical_form').on('click', function(e) {
+   $(this).hide();
+   $('#mapshop_show_private_form').show();
+   $('#mapshop_client_form_juridical').show();
+   $('#mapshop_client_form_private').hide();
+
+});
+
+
+//*************************************************
+
+
+
+
 })

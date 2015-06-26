@@ -14,6 +14,11 @@
             {% endfor %}
          {% endfor %}
      </ul>
+
+<a href='#' onclick="return: false" id="mapshop_show_private_form" style="display: none" >Форма для частных лиц</a>
+
+<a href='#' onclick="return: false" id="mapshop_show_juridical_form">Форма для юридических лиц</a>
+
  
  <div id="mapshop_client_form_private">
     <h3> Форма для частных лиц </h3>
@@ -68,7 +73,7 @@
  </div>
 
 
- <div id="mapshop_client_form_private">
+ <div id="mapshop_client_form_juridical" style="display: none">
     <h3> Форма для юридических лиц </h3>
 
     <form href="/finish/order/{{ o.id }}" method="POST">
