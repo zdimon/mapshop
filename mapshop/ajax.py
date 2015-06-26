@@ -165,7 +165,7 @@ def getinfo_kiosk(request):
         client.kiosk = kiosk
         client.save()
     order.kiosk = kiosk
-    order.status = u'Киоск выбран'
+    order.status = 2
     order.save()
     context = {'kiosk_name' : kiosk.name,
                'kiosk_address' : kiosk.address,

@@ -27,3 +27,21 @@ def test_task(product):
         sendm(i.contact,u'Уведомление о поступлении товара', t.render(c))
     for i in Preorder.objects.all().filter(type='phone'):
         print colored('Sending SMS to %s' % i.contact, 'white')
+
+
+@task(name='change_order_status_task')
+def change_order_status_task(order):
+    if order.status==6:
+        t = loader.get_template('mapshop/mail_templates/order_delivered.tpl')
+        title = u'Ваш товар доставлен.' 
+    elif order.status==5:
+        t = loader.get_template('mapshop/mail_templates/order_delivering.tpl')
+        title = u'Ваш товар передан в службу доставки.'
+    #try:
+    c = Context({'order': order})
+    print colored(t.render(c), 'yellow')
+    sendm(order.client.email,title, t.render(c))
+    #except:
+    #    pass
+
+

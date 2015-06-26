@@ -11,6 +11,7 @@ from django.db.models.signals import post_save
 
 
 
+
 class Kiosk(models.Model):
     u''' Класс Киоск содержит все данные о киоске (адрес, фото, мнемонику, широту, долготу) '''
     address = models.CharField(max_length=200)
@@ -44,7 +45,7 @@ class Product(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
-        self.__original_ammount = self.ammount
+        self.__original_ammount = int(self.ammount)
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=u"Стоимость (руб)")
     description = models.CharField(max_length=200)
@@ -72,7 +73,7 @@ class Product(models.Model):
             self.name_slug = pytils.translit.slugify(self.name)
         if self.ammount != self.__original_ammount and self.__original_ammount==0:
             test_task.delay(self)
-            self.__original_ammount = self.ammount
+            self.__original_ammount = int(self.ammount)
         return super(Product, self).save(**kwargs)
     @property
     def get_other_images_except_main(self):
@@ -136,19 +137,23 @@ class Client(models.Model):
 
 class Order(models.Model):
     u''' заказы по клиенту '''
+    __original_status = None
+    def __init__(self, *args, **kwargs):
+        super(Order, self).__init__(*args, **kwargs)
+        self.__original_status = self.status
     STATUSES = (
-        (u'Новый', u'Новый'),
-        (u'Киоск выбран', u'Киоск выбран'),
-        (u'Ожидает оплаты', u'Ожидает оплаты'),
-        (u'Оплачен', u'Оплачен'),
-        (u'Доставка', u'Доставка'),
-        (u'Доставлен', u'Доставлен'),
-        (u'Отказ', u'Отказ'),
+        (1, u'Новый'),
+        (2, u'Киоск выбран'),
+        (3, u'Ожидает оплаты'),
+        (4, u'Оплачен'),
+        (5, u'Доставка'),
+        (6, u'Доставлен'),
+        (7, u'Отказ'),
     )
-    status = models.CharField(verbose_name=u'Статус заказа',
+    status = models.IntegerField(verbose_name=u'Статус заказа',
                                     choices=STATUSES,
-                                    default=u'Новый',
-                                    max_length=20)
+                                    default=1,
+                                    )
     client = models.ForeignKey('Client', null=True, blank=True) 
     kiosk = models.ForeignKey('Kiosk', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -159,6 +164,12 @@ class Order(models.Model):
         for i in self.orderitem_set.all():
             t = t + (i.product.price*i.ammount)
         return t
+    def save(self, **kwargs):
+        from mapshop.tasks import change_order_status_task
+        if self.status != self.__original_status:
+            change_order_status_task.delay(self)
+            self.__original_status = self.status
+        return super(Order, self).save(**kwargs)
     
 
 class OrderItem(models.Model):

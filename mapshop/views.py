@@ -133,7 +133,6 @@ def finish_order(request,order_id):
         form = ClientForm(request.POST)
         if form.is_valid():
             client = form.save()
-            order.status = u'Ожидает оплаты'
             order.session = 'done'
             order.save()
             return HttpResponseRedirect('/thanks/')
