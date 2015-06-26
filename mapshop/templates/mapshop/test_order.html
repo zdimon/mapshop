@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block my_basket %}{% endblock %}
+
+{% block content %}
+
+ <h1> Заказ № {{ order.id }} </h1>
+
+ <p>Статус заказа: {{ order.get_status_display }} </p>
+
+    <form action="{% url 'test_payment' order_id=order.id%}" method="POST">
+        <input type="submit" value="Оплатить">
+    </form>
+
+
+{% endblock %}

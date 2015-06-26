@@ -11,8 +11,9 @@ urlpatterns = patterns( '',
     url(r'^product/detail/(?P<slug>[^\.]+).html$', 'mapshop.views.product_detail', name="product_detail"),
     url(r'^kiosk/list/(?P<order_id>[^\.]+).html$', 'mapshop.views.kiosk_list', name="kiosk_all"),
     url(r'^finish/order/(?P<order_id>[^\.]+)$', 'mapshop.views.finish_order', name="finish_order"),
-    url(r'^thanks/$', 'mapshop.views.thanks'),
+    url(r'^thanks/(?P<order_id>[^\.]+)$', 'mapshop.views.thanks'),
     url(r'^kiosk/$', KioskView.as_view()),
+    url(r'^test/payment/(?P<order_id>[^\.]+)$', 'mapshop.views.test_payment', name="test_payment"),
 
     ##################AJAX REQUESTS############################
     url(r'^add/to/cart/$', 'mapshop.ajax.add_product_to_cart'),

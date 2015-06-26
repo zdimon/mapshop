@@ -31,17 +31,21 @@ def test_task(product):
 
 @task(name='change_order_status_task')
 def change_order_status_task(order):
-    if order.status==6:
+    #print 'changing status on %s' % order.status
+    if int(order.status)==6:
         t = loader.get_template('mapshop/mail_templates/order_delivered.tpl')
         title = u'Ваш товар доставлен.' 
-    elif order.status==5:
+    elif int(order.status)==5:
         t = loader.get_template('mapshop/mail_templates/order_delivering.tpl')
         title = u'Ваш товар передан в службу доставки.'
-    #try:
-    c = Context({'order': order})
-    print colored(t.render(c), 'yellow')
-    sendm(order.client.email,title, t.render(c))
-    #except:
-    #    pass
+    elif int(order.status)==4:
+        t = loader.get_template('mapshop/mail_templates/order_paied.tpl')
+        title = u'Ваш товар оплачен.'
+    try:
+        c = Context({'order': order})
+        print colored(t.render(c), 'yellow')
+        sendm(order.client.email,title, t.render(c))
+    except:
+        pass
 
 

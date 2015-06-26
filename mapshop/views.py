@@ -7,6 +7,8 @@ from mapshop.models import Category, Product, Kiosk, Order, Client, get_client_o
 from mapshop.forms import ClientForm
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .settings import *
+from django.views.decorators.csrf import csrf_exempt
 
 import django.dispatch
 payment_done = django.dispatch.Signal(providing_args=["order_id"])
@@ -135,7 +137,12 @@ def finish_order(request,order_id):
             client = form.save()
             order.session = 'done'
             order.save()
-            return HttpResponseRedirect('/thanks/')
+            if request.POST.get('by_cheque'):
+                #import pdb; pdb.set_trace()
+                url = API_BILLING_PAGE.replace('{{sum}}',str(order.total)).replace('{{ms_order_id}}', str(order.id))
+                return HttpResponseRedirect(url)
+            else:
+                return HttpResponseRedirect('/thanks/%s' % str(order.id))
     else:
         if request.user.is_authenticated():
             client = get_client_or_create(request.user)
@@ -147,12 +154,27 @@ def finish_order(request,order_id):
     return render_to_response('mapshop/finish_order.html', context, RequestContext(request))
 
 
-def thanks(request):
+def thanks(request,order_id):
     u''' 
         Страница благодарности
     '''
-    context = {}
+    order= get_object_or_404(Order,id=order_id)
+    context = {'order': order}
     return render_to_response('mapshop/thanks.html', context, RequestContext(request))
+
+
+@csrf_exempt
+def test_payment(request,order_id):
+    u''' 
+        Функция эмуляции оплаты заказа
+    '''
+    order= get_object_or_404(Order,id=order_id)
+    if request.method == 'POST':
+        order.status = 4
+        order.save()
+    context = {'order': order}
+    return render_to_response('mapshop/test_order.html', context, RequestContext(request))
+
 
 
 
