@@ -2,7 +2,7 @@
 from django_ajax.decorators import ajax
 from django.shortcuts import render
 from mapshop.models import Category, Product, Kiosk, Order, OrderItem, get_client_or_create, Preorder, Client
-
+from django.db.models import Q
 
 
 @ajax
@@ -12,10 +12,10 @@ def search_kiosk(request):
     key = request.GET['key']
     order_id = request.GET['order_id']
     #try:
-    ks = Kiosk.objects.filter(name__icontains=key)
+    ks = Kiosk.objects.filter(Q(name__icontains=key) | Q(address__icontains=key) )
     if ks.count() > 0:
         for k in ks:
-            out = out + '<p> <a href="#" onclick="return: false" class="mapshop_search_rezult" data-kiosk-id="%s" data-order-id=%s>%s </a> </p>' % (k.id, order_id, k.name)
+            out = out + '<p> <a href="#" onclick="return: false" class="mapshop_search_rezult" data-kiosk-id="%s" data-order-id=%s>%s (%s)</a> </p>' % (k.id, order_id, k.name, k.address)
     else:
         out = u'<p>По строке %s ничего не найдено</p>' % key
     #except:
