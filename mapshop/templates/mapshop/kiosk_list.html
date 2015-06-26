@@ -21,27 +21,29 @@ var map;
 function initialize() {
     var myLatLng = Array();
     var marker = Array();
-    {% for k in kiosk_list %}
-     myLatLng[{{k.id}}] = new google.maps.LatLng({{ k.latitude }},{{ k.longitude }});
-    {% endfor %}
+    var image = '/static/marker.png';
+   
 
     var mapOptions = {
-    zoom: 8,
-    center: myLatLng[1]
+    zoom: 11,
+    center: new google.maps.LatLng(55.7558259999999,37.6173),
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
 
 {% for k in kiosk_list %}
+    pos = new google.maps.LatLng({{ k.latitude }},{{ k.longitude }});
     marker[{{k.id}}] = new google.maps.Marker({
-    position: myLatLng[{{k.id}}],
-    map: map,
-    title: '{{k.name}}'
-  });
-google.maps.event.addListener(marker[{{k.id}}], 'click', function() {
-    ajaxGet('/getinfo/kiosk', { 'kiosk_id': {{k.id}}, 'order_id': {{order.id}}}, function(content){});
+                                                position: pos,
+                                                map: map,
+                                                title: '{{k.name}}',
+                                                icon: image
+                                              });
 
-});
+    google.maps.event.addListener(marker[{{k.id}}], 'click', function() {
+        ajaxGet('/getinfo/kiosk', { 'kiosk_id': {{k.id}}, 'order_id': {{order.id}}}, function(content){});
+
+    });
 
 {% endfor %}
 
