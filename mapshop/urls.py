@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 import mapshop.views as views
-
+from mapshop.views import KioskView
 
 from django.conf.urls import patterns, url
 
@@ -12,7 +12,7 @@ urlpatterns = patterns( '',
     url(r'^kiosk/list/(?P<order_id>[^\.]+).html$', 'mapshop.views.kiosk_list', name="kiosk_all"),
     url(r'^finish/order/(?P<order_id>[^\.]+)$', 'mapshop.views.finish_order', name="finish_order"),
     url(r'^thanks/$', 'mapshop.views.thanks'),
-    
+    url(r'^kiosk/$', KioskView.as_view()),
 
     ##################AJAX REQUESTS############################
     url(r'^add/to/cart/$', 'mapshop.ajax.add_product_to_cart'),

@@ -163,3 +163,13 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'fixture/test_mail')
 SITE_ID = 1
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache'),
+    }
+}
+
+
+
+

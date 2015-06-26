@@ -13,3 +13,4 @@ fixture/test_mail
 mapshop.egg-info
 dist
 django_mapshop.egg-info
+cache

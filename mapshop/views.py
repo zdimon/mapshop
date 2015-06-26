@@ -11,6 +11,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django.dispatch
 payment_done = django.dispatch.Signal(providing_args=["order_id"])
 
+from django.views.decorators.cache import cache_page
+
+from django.views.generic import DetailView, ListView
+
+class KioskView(ListView):
+    model = Kiosk
+    template_name = 'mapshop/kioski_list.html'
+    paginate_by = 2
 
 
 def home(request):
@@ -19,7 +27,7 @@ def home(request):
     print 'my var %s ' % request.supervar
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
-
+@cache_page(60 * 2)
 def product_list(request,slug='all'):
     u''' 
         Список товаров в категории (по умолчанию во всех категориях)
