@@ -49,3 +49,17 @@ def change_order_status_task(order):
         pass
 
 
+
+@task(name='mapshop_create_user_email')
+def mapshop_create_user_email(user,password):
+    site = Site.objects.get_current()
+    t = loader.get_template('mapshop/mail_templates/new_user_created.tpl')
+    title = u'Вы зарегистрированы на сайте.' 
+    c = Context({'user': user, 'password': password, 'site_name': site.name})
+    print colored(t.render(c), 'yellow')
+    sendm(user.email,title, t.render(c))
+
+
+
+
+

@@ -9,13 +9,14 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .settings import *
 from django.views.decorators.csrf import csrf_exempt
-
+import requests
 import django.dispatch
-payment_done = django.dispatch.Signal(providing_args=["order_id"])
-
 from django.views.decorators.cache import cache_page
-
 from django.views.generic import DetailView, ListView
+import json
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from .tasks import mapshop_create_user_email
 
 class KioskView(ListView):
     model = Kiosk
@@ -25,7 +26,6 @@ class KioskView(ListView):
 
 def home(request):
     context = {}
-    payment_done.send(None,order_id=12)
     print 'my var %s ' % request.supervar
     return render_to_response('mapshop/home.html', context, RequestContext(request))
 
@@ -137,6 +137,14 @@ def finish_order(request,order_id):
             client = form.save()
             order.session = 'done'
             order.save()
+            if not request.user.is_authenticated():
+                data = {'email': client.email}
+                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+                responce = json.loads(requests.post(API_CREATE_USER, data=json.dumps(data), headers=headers).content)
+                user =  User.objects.get(id=responce['user_id'])
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request,user)
+                mapshop_create_user_email.delay(user,responce['password'])
             if request.POST.get('by_cheque'):
                 #import pdb; pdb.set_trace()
                 url = API_BILLING_PAGE.replace('{{sum}}',str(order.total)).replace('{{ms_order_id}}', str(order.id))
