@@ -27,6 +27,7 @@ urlpatterns = patterns( '',
     ##################API REQUESTS############################
     url(r'^api/product/edit$', 'mapshop.api.product_edit'),
     url(r'^api/product/bye$', 'mapshop.api.product_bye'),
+    url(r'^api/create/user$', 'mapshop.tests.create_user'),
 
 
 )
