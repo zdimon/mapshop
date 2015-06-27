@@ -14,3 +14,4 @@ mapshop.egg-info
 dist
 django_mapshop.egg-info
 cache
+test.txt
