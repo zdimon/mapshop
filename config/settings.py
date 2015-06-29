@@ -21,7 +21,7 @@ SECRET_KEY = '%wj7$*wa6x%0h5a)%ue68a9#4&8vaqu!7lq*&^6&bi1@2k4h*5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = ['*']
-DEBUG = False
+DEBUG = True
 
 
 TEMPLATE_DEBUG = True
@@ -168,7 +168,8 @@ SITE_ID = 1
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache'),
     }
 }

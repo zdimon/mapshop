@@ -41,17 +41,14 @@ def product_list(request,slug='all'):
     cur_price_order = 'asc'
     # get all products
     products = Product.objects.all()
-    
+    category_list = Category.objects.filter(level=0)
     if slug=='all':
         title = 'Все товары'
-        # select all categories 
-        category_list = Category.objects.all()
+        category = None
     else:
         
         category =  Category.objects.get(name_slug=slug)
         title = 'Товары из категории "%s"' % category
-        # select all categories excluding current
-        category_list = Category.objects.all().exclude(name_slug=slug)
         # add filter
         products = products.filter(category=category)
 
@@ -99,7 +96,7 @@ def product_list(request,slug='all'):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         products = products.page(paginator.num_pages)
-    context = {'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order, 'cur_price_order': cur_price_order}
+    context = {'category': category, 'title': title, 'category_list': category_list, 'product_list': products, 'cur_rate_order': cur_rate_order, 'cur_price_order': cur_price_order}
     return render_to_response('mapshop/product_list.html', context, RequestContext(request))
 
 

@@ -4,6 +4,9 @@
 
  <h1> {{ title }} </h1>
 
+
+
+
  <div class="ordering">
     {% if cur_rate_order == 'desc' %}
         <a href="?rate_order=asc">по рейтингу вверх</a>
@@ -26,7 +29,19 @@
     {% for c in category_list %}
         <a href="{{ c.get_absolute_url }}">{{ c }}</a>
     {% endfor %}
+
+    {% for ch in category.get_children %}
+       <a style="color: red" href="{{ ch.get_absolute_url }}">{{ ch }}</a>
+    {% endfor %}
+
  </div>
+
+
+
+
+
+
+
 
  <div class="product_list">
     {% for p in product_list %}
