@@ -20,11 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '%wj7$*wa6x%0h5a)%ue68a9#4&8vaqu!7lq*&^6&bi1@2k4h*5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ALLOWED_HOSTS = ['*']
+DEBUG = False
+
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
         'django.contrib.auth.context_processors.auth',
@@ -169,6 +171,38 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache'),
     }
+}
+
+CELERYD_LOG_FORMAT = '[%(asctime)s %(levelname)s %(processName)s %(name)s.%(funcName)s:%(lineno)d] %(message)s'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'handlers': {
+        
+         'root': {
+             'level': 'DEBUG',
+             'class': 'logging.handlers.RotatingFileHandler',
+             'filename': 'log/celery.log',
+             'maxBytes': 1024 * 1024 * 100,  # 100 mb
+              'formatter': 'generic',
+         },
+    },
+     'formatters': {
+         'generic': {
+             'format': CELERYD_LOG_FORMAT,
+             },
+         },
+ 
+    'loggers': {
+        'mapshop.tasks': {
+            'handlers': ['root'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+
+    },
 }
 
 

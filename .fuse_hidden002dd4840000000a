@@ -1,0 +1,14 @@
+[2015-06-29 10:17:08,618 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/jquery-1.10.2.min.js
+[2015-06-29 10:17:08,637 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax.min.js
+[2015-06-29 10:17:08,651 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/mydrive.js
+[2015-06-29 10:17:08,661 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax-plugin.min.js
+[2015-06-29 10:17:08,753 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax.min.js
+[2015-06-29 10:17:08,787 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax-plugin.min.js
+[2015-06-29 10:17:08,822 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/mydrive.js
+[2015-06-29 10:20:53,262 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax.min.js
+[2015-06-29 10:20:53,272 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax-plugin.min.js
+[2015-06-29 10:20:53,279 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/mydrive.js
+[2015-06-29 10:20:53,291 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/jquery-1.10.2.min.js
+[2015-06-29 10:20:53,380 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax.min.js
+[2015-06-29 10:20:53,402 WARNING MainProcess django.request.get_response:145] Not Found: /static/django_ajax/js/jquery.ajax-plugin.min.js
+[2015-06-29 10:20:53,446 WARNING MainProcess django.request.get_response:145] Not Found: /static/js/mydrive.js

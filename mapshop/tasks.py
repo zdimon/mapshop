@@ -8,6 +8,10 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from settings import EMAIL_REPLY
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 def sendm(email, title, body):
     msg = EmailMultiAlternatives(title, body, EMAIL_REPLY, (email,))
     msg.content_subtype = "html"
@@ -26,7 +30,7 @@ def test_task(product):
         print colored(t.render(c), 'yellow')
         sendm(i.contact,u'Уведомление о поступлении товара', t.render(c))
     for i in Preorder.objects.all().filter(type='phone'):
-        print colored('Sending SMS to %s' % i.contact, 'white')
+        logger.info('Sending SMS to %s' % i.contact)
 
 
 @task(name='change_order_status_task')
@@ -43,7 +47,7 @@ def change_order_status_task(order):
         title = u'Ваш товар оплачен.'
     try:
         c = Context({'order': order})
-        print colored(t.render(c), 'yellow')
+        logger.info(t.render(c))
         sendm(order.client.email,title, t.render(c))
     except:
         pass
@@ -56,7 +60,7 @@ def mapshop_create_user_email(user,password):
     t = loader.get_template('mapshop/mail_templates/new_user_created.tpl')
     title = u'Вы зарегистрированы на сайте.' 
     c = Context({'user': user, 'password': password, 'site_name': site.name})
-    print colored(t.render(c), 'yellow')
+    logger.info(t.render(c))
     sendm(user.email,title, t.render(c))
 
 

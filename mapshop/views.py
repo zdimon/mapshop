@@ -18,6 +18,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .tasks import mapshop_create_user_email
 
+
 class KioskView(ListView):
     model = Kiosk
     template_name = 'mapshop/kioski_list.html'
