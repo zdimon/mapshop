@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'djcelery',
     'django.contrib.sites',
     'mptt',
+    'rest_framework',
     
 )
 

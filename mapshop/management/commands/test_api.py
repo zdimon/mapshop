@@ -57,5 +57,12 @@ class Command(BaseCommand):
             headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
             responce = requests.post(url, data=json.dumps(data), headers=headers).content
             print colored(responce, 'white')
+        if action=='rest_api_create_category':
+            data = {'name': 'New category'}
+            url = 'http://localhost:8008/restapi/categories'
+            headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+            responce = requests.post(url, data=json.dumps(data), headers=headers).content
+            print colored(responce, 'white')
+
 
        
