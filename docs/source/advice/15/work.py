@@ -43,25 +43,86 @@ home            = /home/zarik/web/django_projects/cms_ve
 
 
 
-
+TORNADO
+------------------------------------
 #! /usr/bin/env python
 import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
 import tornado.httpserver
 import tornado.ioloop
 import tornado.wsgi
 import sys
 import django.core.handlers.wsgi
-from config.settings import BASE_DIR
-sys.path.append(BASE_DIR)
+#sys.path.append('/home/lawgon/') # path to your project ( if you have it in another dir).
+
+
 def main():
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
-        application = django.core.handlers.wsgi.WSGIHandler()
-        container = tornado.wsgi.WSGIContainer(application)
-        http_server = tornado.httpserver.HTTPServer(container)
-        http_server.listen(8080)
-        tornado.ioloop.IOLoop.instance().start()
+     # path to your settings module
+    application = django.core.handlers.wsgi.WSGIHandler()
+    container = tornado.wsgi.WSGIContainer(application)
+    http_server = tornado.httpserver.HTTPServer(container)
+    http_server.listen(8800)
+    tornado.ioloop.IOLoop.instance().start()
+
 if __name__ == "__main__":
-                main()
+    main()
+----------------------------------
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False 
+
+
+
+UNICORN
+
+INSTALLED_APPS += ('gunicorn', )
+
+
+gunicorn  config.wsgi:application –env DJANGO_SETTINGS_MODULE=config.settings -pid ./pshop.pid
+
+./manage.py run_gunicorn --workers 10 --timeout 300 --bind 127.0.0.1:8080 --pid ./pshop.pid
+
+
+gunicorn_django -b 127.0.0.1:8000 --settings=config.settings.dev --debug --log
+
+
+[program:pressa_gunicorn]
+command=/home/django/pressa_ve/bin/python /home/django/pressa_ve/pressa/manage.py run_gunicorn --workers 10 --timeout 300 --bind 127.0.0.1:8080 --pid /home/django/pressa_ve/var/run/gunicorn.pid
+directory=/home/django/pressa_ve/pressa
+environment=PATH="/home/django/pressa_ve/bin"
+user=django
+autostart=true
+autorestart=true
+
+
+
+
+
+
+Nginx
+server {
+    listen 80 ;
+    server_name shop.mirbu.com;
+    
+    client_max_body_size   100m;
+
+        location / {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Scheme $scheme;
+            proxy_pass http://localhost:8800;
+        }
+
+    location /static {
+        alias /home/zdimon/pshop_ve/pshop/static;
+    }
+        
+ location /media {
+        alias /home/zdimon/pshop_ve/pshop/media;
+     }
+}
+
 
 
 
